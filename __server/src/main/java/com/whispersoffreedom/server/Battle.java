@@ -1,5 +1,6 @@
 package com.whispersoffreedom.server;
 
+import com.whispersoffreedom.server.exception.BattleAlreadyStarted;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -36,6 +37,8 @@ public class Battle {
     }
 
     public void rename(Client c, String newName) {
+        if (!status.equals(BattleStatus.LOBBY))
+            throw new BattleAlreadyStarted();
         broadcast(String.format(
                 "User %s is changing the name of the lobby to %s",
                 c.getUsername(), newName

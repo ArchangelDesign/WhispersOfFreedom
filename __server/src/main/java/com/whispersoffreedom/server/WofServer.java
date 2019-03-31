@@ -48,6 +48,8 @@ public class WofServer {
     public static Battle initializeBattle(String userToken) {
         Battle newBattle = new Battle();
         Client c = getClient(userToken);
+        if (c.isInBattle())
+            throw new AlreadyInBattleException();
         c.enterBattle(newBattle);
         newBattle.getClients().put(c.getId().toString(), c);
         battles.put(newBattle.getBattleId(), newBattle);
@@ -57,10 +59,16 @@ public class WofServer {
     }
 
     public static void clientLeavesBattle(Client client) {
+        if (!client.isInBattle())
+            throw new NotInBattleException();
         client.getCurrentBattle().broadcast(
                 String.format("Client %s is disconnecting from battle.", client.getUsername()));
+        String battleId = client.getCurrentBattle().getBattleId();
         client.getCurrentBattle().clientLeaves(client);
         client.leaveBattle();
+        Battle b = getBattle(battleId);
+        if (b.getClients().size() == 0)
+            battles.remove(battleId);
     }
 
     public static List<Battle> getOpenLobbies() {

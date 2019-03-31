@@ -23,10 +23,11 @@ public class Client {
     @Getter
     private Battle previousBattle = null;
 
-    Logger logger = LoggerFactory.getLogger(String.format("Client [%s]", id));
+    Logger logger;
 
     public Client(String newUsername) {
         username = newUsername;
+        logger = LoggerFactory.getLogger(String.format("Client [%s]", newUsername));
     }
 
     public void enterBattle(Battle battle) {
@@ -41,6 +42,6 @@ public class Client {
     }
 
     public void broadcast(String message) {
-        logger.info("Broadcasting message.");
+        logger.info("Broadcasting message: " + message);
     }
 }

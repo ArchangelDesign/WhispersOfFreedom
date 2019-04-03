@@ -23,6 +23,8 @@ public class Client {
     @Getter
     private Battle previousBattle = null;
 
+    private TcpConnection connection;
+
     Logger logger;
 
     public Client(String newUsername) {
@@ -43,5 +45,9 @@ public class Client {
 
     public void broadcast(String message) {
         logger.info("Broadcasting message: " + message);
+    }
+
+    public void acceptTcpConnection(TcpConnection conn) {
+        connection = conn;
     }
 }

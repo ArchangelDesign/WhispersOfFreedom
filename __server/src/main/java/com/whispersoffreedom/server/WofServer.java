@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.*;
 
 public class WofServer {
@@ -18,9 +19,12 @@ public class WofServer {
 
     private static Logger logger = LoggerFactory.getLogger(WofServer.class);
 
-    public static void initializeServer() {
+    private static TcpServer tcpServer;
+
+    public static void initializeServer() throws IOException {
         if (initialized)
             throw new ServerAlreadyInitializedException();
+        tcpServer = new TcpServer();
         initialized = true;
     }
 

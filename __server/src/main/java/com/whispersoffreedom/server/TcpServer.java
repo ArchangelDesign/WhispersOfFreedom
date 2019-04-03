@@ -8,10 +8,14 @@ import org.springframework.stereotype.Service;
 
 import java.net.*;
 import java.io.*;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class TcpServer {
+
+    private final int CONNECTION_TIMEOUT_MIN = 1;
 
     @Getter
     private Integer port = 8081;
@@ -50,13 +54,25 @@ public class TcpServer {
             String inputLine;
 
             while ((inputLine = in.readLine()) != null) {
-                logger.info("received: " + inputLine);
-                out.println(inputLine);
+                sendAck(out);
+                connection.rawPacketReceived(inputLine);
             }
+        } catch (SocketException e) {
+            logger.error("Socket Error: " + e.getMessage());
+            logger.error("Client ID: " + id.toString());
+            return;
         } catch (Exception e) {
+            logger.error("Error reading data from " + socket.getRemoteSocketAddress());
             logger.error(e.getMessage());
             return;
         }
+
+        logger.info("Client dropped " + socket.getRemoteSocketAddress());
+    }
+
+    private void sendAck(PrintWriter out) {
+        // @TODO
+        out.println("{\"ack\":1}");
     }
 
     /**
@@ -64,11 +80,31 @@ public class TcpServer {
      */
     private void watchdog() {
         // @TODO
-        try {
-            Thread.sleep(30000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while (true) {
+            try {
+                Thread.sleep(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            connections.forEach((uuid, tcpConnection) -> {
+                if (tcpConnection.getLastTransmission().
+                        isBefore(Instant.now().minus(CONNECTION_TIMEOUT_MIN, ChronoUnit.MINUTES))) {
+                    logger.info(String.format("Dropping %s due to timeout.", uuid));
+                    dropConnection(uuid);
+                    return;
+                }
+            });
         }
-        logger.info("checking lost connections...");
+    }
+
+    private void dropConnection(UUID id) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(100);
+                connections.get(id).getSocket().close();
+                connections.remove(id);
+            } catch (InterruptedException | IOException e) {
+            }
+        }).start();
     }
 }

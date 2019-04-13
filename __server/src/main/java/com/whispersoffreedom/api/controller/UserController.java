@@ -4,6 +4,8 @@ import com.whispersoffreedom.api.dto.*;
 import com.whispersoffreedom.server.Battle;
 import com.whispersoffreedom.server.Client;
 import com.whispersoffreedom.server.WofServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,8 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+    Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @GetMapping({"/health", "/healthCheck", "/health-check"})
     @ResponseStatus(code = HttpStatus.OK)
     public void healthCheck() {
@@ -22,7 +26,7 @@ public class UserController {
     @PostMapping("/enter")
     public WofSession enterServer(@RequestBody StartSessionRequest request) {
         Client client = WofServer.registerClient(request.getUsername());
-
+        WofServer.enterServer(request.getUsername());
         return new WofSession(client.getId().toString());
     }
 

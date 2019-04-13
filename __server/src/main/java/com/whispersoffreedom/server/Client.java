@@ -45,9 +45,23 @@ public class Client {
 
     public void broadcast(String message) {
         logger.info("Broadcasting message: " + message);
+        if (connection == null) {
+            logger.error("No TCP connection for " + username);
+            return;
+        }
+        sendPacket(new WofPacketBroadcast(id.toString(), message));
+    }
+
+    public void sendPacket(WofPacket packet) {
+        connection.sendPacket(packet);
     }
 
     public void acceptTcpConnection(TcpConnection conn) {
+        logger.info(this.username + " is accepting TCP connection from " + conn.getRemoteAddress());
         connection = conn;
+    }
+
+    public TcpConnection getConnection() {
+        return connection;
     }
 }

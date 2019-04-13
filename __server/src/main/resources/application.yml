@@ -1,0 +1,6 @@
+
+WofServer:
+  var: val
+
+TcpServer:
+  port: 8081

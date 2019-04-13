@@ -104,4 +104,33 @@ public class WofServer {
         c.enterBattle(b);
         b.clientEnters(c);
     }
+
+    public static void clientDataReceived(TcpConnection connection, WofPacket packet) {
+        switch (packet.getCommand().toLowerCase()) {
+            case "identification":
+                logger.info("Identifying client... " + packet.getClientId());
+                clients.get(packet.getClientId()).acceptTcpConnection(connection);
+        }
+    }
+
+    public static void enterServer(String username) {
+        logger.info(String.format("User %s is entering the server...", username));
+    }
+
+    public static void clientDropped(UUID connectionId) {
+        String clientId = getClientIdByConnectionId(connectionId);
+        Client client = clients.get(clientId);
+        logger.info("Dropping " + client.getUsername());
+        if (client.isInBattle())
+            clientLeavesBattle(client);
+            //client.getCurrentBattle().broadcast(String.format("%s is being dropped. Connection interrupted.", client.getUsername()));
+        clients.remove(clientId);
+    }
+
+    private static String getClientIdByConnectionId(UUID connectionId) {
+        for (Map.Entry<String, Client> entry : clients.entrySet())
+            if (entry.getValue().getConnection().getConnectionId() == connectionId)
+                return entry.getKey();
+        throw new ClientNotFoundException();
+    }
 }

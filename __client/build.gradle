@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+group 'com.whispersoffreedom'
+version '0.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'java'
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.whispersoffreedom.client.Client'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'com.squareup.okhttp3:okhttp:3.14.1'
+    compile 'org.json:json:20180813'
+    compile 'org.slf4j:slf4j-simple:1.7.26'
+//    compile 'org.mod4j.org.apache.commons:cli:1.0.0'
+}

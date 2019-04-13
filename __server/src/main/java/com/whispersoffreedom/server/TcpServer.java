@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class TcpServer {
 
-    private final int CONNECTION_TIMEOUT_MIN = 1;
+    private final int CONNECTION_TIMEOUT_MIN = 10;
 
     @Getter
     private Integer port = 8081;
@@ -60,19 +60,19 @@ public class TcpServer {
         } catch (SocketException e) {
             logger.error("Socket Error: " + e.getMessage());
             logger.error("Client ID: " + id.toString());
-            return;
         } catch (Exception e) {
             logger.error("Error reading data from " + socket.getRemoteSocketAddress());
-            logger.error(e.getMessage());
-            return;
+            e.printStackTrace();
         }
 
         logger.info("Client dropped " + socket.getRemoteSocketAddress());
+        WofServer.clientDropped(connection.getConnectionId());
+        connections.remove(id);
     }
 
     private void sendAck(PrintWriter out) {
         // @TODO
-        out.println("{\"ack\":1}");
+        out.println("{\"command\":\"ack\"}");
     }
 
     /**
@@ -93,6 +93,7 @@ public class TcpServer {
                     dropConnection(uuid);
                     return;
                 }
+                tcpConnection.sendPacket(new WofPacket().setCommand("ping"));
             });
         }
     }

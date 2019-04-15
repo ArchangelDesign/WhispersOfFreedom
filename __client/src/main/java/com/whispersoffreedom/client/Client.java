@@ -17,6 +17,8 @@ public class Client {
     Socket connection;
     String currentSessionToken;
     ApiClient apiClient = new ApiClient(SERVER_URL);
+    private boolean isSynchornized = false;
+    private boolean connected = false;
     private Thread connectionThread;
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -32,6 +34,7 @@ public class Client {
         logger.info("connecting to " + SERVER_URL);
         String sessionToken = apiClient.enterServer(username);
         currentSessionToken = sessionToken;
+        connected = true;
         startTcpConnection(sessionToken);
         logger.info("TOKEN: " + sessionToken);
         logger.info("starting battle");
@@ -47,7 +50,7 @@ public class Client {
         apiClient.enterBattle(battleToken, sessionToken);
         System.out.print("press enter to exit.");
         readFromConsole();
-        connectionThread.stop();
+        System.exit(0);
     }
 
     private String readFromConsole() throws IOException {
@@ -98,6 +101,11 @@ public class Client {
             case "ping":
                 System.out.print('.');
                 break;
+            case "welcome":
+                // welcome message should arrive as soon as we connect via TCP
+                // and identify ourselves to associate REST session with TCP socket
+                isSynchornized = true;
+                logger.info("Client is now synchronized.");
             default:
                 logger.info("Message from server: " + message);
         }

@@ -110,6 +110,7 @@ public class WofServer {
             case "identification":
                 logger.info("Identifying client... " + packet.getClientId());
                 clients.get(packet.getClientId()).acceptTcpConnection(connection);
+                connection.sendPacket(new WofPacketSimple(packet.clientId, "welcome"));
         }
     }
 
@@ -123,7 +124,6 @@ public class WofServer {
         logger.info("Dropping " + client.getUsername());
         if (client.isInBattle())
             clientLeavesBattle(client);
-            //client.getCurrentBattle().broadcast(String.format("%s is being dropped. Connection interrupted.", client.getUsername()));
         clients.remove(clientId);
     }
 

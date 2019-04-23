@@ -66,4 +66,21 @@ public class Battle {
         ));
         clients.remove(c.getId().toString());
     }
+
+    public void startBattle(Client c) {
+        broadcast(c.getUsername() + " is starting the battle...");
+        status = BattleStatus.STARTING;
+        // loading process
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        status = BattleStatus.IN_PROGRESS;
+    }
+
+    public void terminateBattle(Client c) {
+        broadcast(c.getUsername() + " is terminating the battle...");
+        status = BattleStatus.POSTMORTEM;
+    }
 }

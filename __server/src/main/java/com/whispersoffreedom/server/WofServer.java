@@ -1,5 +1,6 @@
 package com.whispersoffreedom.server;
 
+import com.whispersoffreedom.server.command.WofCommand;
 import com.whispersoffreedom.server.exception.*;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -108,21 +109,8 @@ public class WofServer {
     }
 
     public static void clientDataReceived(TcpConnection connection, WofPacket packet) {
-        switch (packet.getCommand().toLowerCase()) {
-            case "identification":
-                logger.info("Identifying client... " + packet.getClientId());
-                clients.get(packet.getClientId()).acceptTcpConnection(connection);
-                connection.sendPacket(new WofPacketSimple(packet.clientId, "welcome"));
-                break;
-            case "start":
-                if (connection.getClient() == null)
-                    throw new RuntimeException("Connection is not identified. Cannot start the battle.");
-                if (!connection.getClient().isInBattle())
-                    throw new NotInBattleException();
-                if (!connection.getClient().getCurrentBattle().isHost(connection.getClient()))
-                    throw new RuntimeException("Not your battle.");
-                logger.info(connection.getClient().getUsername() + " is starting the battle...");
-        }
+        WofCommand command = WofCommand.build(connection, packet);
+        command.execute();
     }
 
     public static void enterServer(String username) {

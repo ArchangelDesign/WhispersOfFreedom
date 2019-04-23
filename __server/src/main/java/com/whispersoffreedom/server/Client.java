@@ -59,6 +59,7 @@ public class Client {
     public void acceptTcpConnection(TcpConnection conn) {
         logger.info(this.username + " is accepting TCP connection from " + conn.getRemoteAddress());
         connection = conn;
+        conn.setClient(this);
     }
 
     public TcpConnection getConnection() {

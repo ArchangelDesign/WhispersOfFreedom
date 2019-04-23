@@ -21,6 +21,8 @@ public class WofServer {
 
     private static TcpServer tcpServer;
 
+    private static final int MAX_CLIENTS = 20;
+
     public static void initializeServer() throws IOException {
         if (initialized)
             throw new ServerAlreadyInitializedException();
@@ -111,11 +113,28 @@ public class WofServer {
                 logger.info("Identifying client... " + packet.getClientId());
                 clients.get(packet.getClientId()).acceptTcpConnection(connection);
                 connection.sendPacket(new WofPacketSimple(packet.clientId, "welcome"));
+                break;
+            case "start":
+                if (connection.getClient() == null)
+                    throw new RuntimeException("Connection is not identified. Cannot start the battle.");
+                if (!connection.getClient().isInBattle())
+                    throw new NotInBattleException();
+                if (!connection.getClient().getCurrentBattle().isHost(connection.getClient()))
+                    throw new RuntimeException("Not your battle.");
+                logger.info(connection.getClient().getUsername() + " is starting the battle...");
         }
     }
 
     public static void enterServer(String username) {
         logger.info(String.format("User %s is entering the server...", username));
+    }
+
+    public static boolean isFull() {
+        return getClientCount() >= MAX_CLIENTS;
+    }
+
+    public static int getClientCount() {
+        return clients.size();
     }
 
     public static void clientDropped(UUID connectionId) {

@@ -19,6 +19,8 @@ public class Battle {
     @Getter
     private String name = "Auto-generated from " + battleId;
 
+    private Client host;
+
     public Battle() {
         new Thread(() -> {
             try {
@@ -45,6 +47,10 @@ public class Battle {
         ));
 
         name = newName;
+    }
+
+    public boolean isHost(Client c) {
+        return c.getUsername().equals(host.getUsername());
     }
 
     public void clientEnters(Client c) {

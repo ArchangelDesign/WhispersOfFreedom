@@ -20,6 +20,7 @@ public class Client {
     private boolean isSynchornized = false;
     private boolean connected = false;
     private Thread connectionThread;
+    boolean inBattle = false;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Client client = new Client();
@@ -36,21 +37,47 @@ public class Client {
         currentSessionToken = sessionToken;
         connected = true;
         startTcpConnection(sessionToken);
-        logger.info("TOKEN: " + sessionToken);
-        logger.info("starting battle");
-        String battleToken = apiClient.startBattle(sessionToken);
-        logger.info("Battle started. Token: " + battleToken);
-        System.out.print("press enter to continue.");
-        readFromConsole();
-        logger.info("leaving the battle...");
-        apiClient.leaveBattle(sessionToken);
-        System.out.print("Battle token: ");
-        battleToken = readFromConsole();
-        logger.info("entering existing battle...");
-        apiClient.enterBattle(battleToken, sessionToken);
+        logger.info("session token: " + sessionToken);
+        String cmd;
+        while (!(cmd = readFromConsole()).equals("exit")) {
+            handleCommand(cmd);
+        }
         System.out.print("press enter to exit.");
         readFromConsole();
         System.exit(0);
+    }
+
+    private void handleCommand(String cmd) throws IOException {
+        switch (cmd) {
+            case "start":
+                if (inBattle) {
+                    System.out.println("already in battle. starting the battle.");
+
+                    return;
+                }
+                logger.info("starting battle...");
+                String battleToken = apiClient.startBattle(currentSessionToken);
+                logger.info("Battle started. Token: " + battleToken);
+                inBattle = true;
+                break;
+            case "leave":
+                if (!inBattle)
+                    return;
+                logger.info("leaving the battle...");
+                apiClient.leaveBattle(currentSessionToken);
+                inBattle = false;
+                break;
+            case "join":
+                if (inBattle) {
+                    System.out.println("Already in battle");
+                    return;
+                }
+                System.out.print("token of battle to join: ");
+                String t = readFromConsole();
+                logger.info("entering existing battle...");
+                apiClient.enterBattle(t, currentSessionToken);
+                break;
+        }
     }
 
     private String readFromConsole() throws IOException {
@@ -87,6 +114,15 @@ public class Client {
         JSONObject entity = new JSONObject();
         entity.put("clientId", currentSessionToken);
         entity.put("command", "identification");
+        writer.println(entity.toString());
+    }
+
+    private void sendCommand(String cmd, String arg1) throws IOException {
+        PrintWriter writer = new PrintWriter(connection.getOutputStream(), true);
+        JSONObject entity = new JSONObject();
+        entity.put("clientId", currentSessionToken);
+        entity.put("command", cmd);
+        entity.put("arg1", arg1);
         writer.println(entity.toString());
     }
 

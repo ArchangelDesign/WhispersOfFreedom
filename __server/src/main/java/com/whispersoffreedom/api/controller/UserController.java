@@ -4,6 +4,7 @@ import com.whispersoffreedom.api.dto.*;
 import com.whispersoffreedom.server.Battle;
 import com.whispersoffreedom.server.Client;
 import com.whispersoffreedom.server.WofServer;
+import com.whispersoffreedom.server.exception.ServerFullException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ public class UserController {
 
     @PostMapping("/enter")
     public WofSession enterServer(@RequestBody StartSessionRequest request) {
+        if (WofServer.isFull())
+            throw new ServerFullException();
         Client client = WofServer.registerClient(request.getUsername());
         WofServer.enterServer(request.getUsername());
         return new WofSession(client.getId().toString());

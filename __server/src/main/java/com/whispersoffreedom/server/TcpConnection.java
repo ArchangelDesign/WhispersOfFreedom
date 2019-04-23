@@ -34,6 +34,8 @@ public class TcpConnection {
 
     private Logger logger;
 
+    private Client client;
+
     public void noticeTransmission() {
         lastTransmission = Instant.now();
     }
@@ -94,5 +96,9 @@ public class TcpConnection {
 
     public String getRemoteAddress() {
         return socket.getRemoteSocketAddress().toString();
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

@@ -2,6 +2,7 @@ package com.whispersoffreedom.client;
 
 import okhttp3.*;
 import okio.BufferedSink;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -98,5 +99,19 @@ public class ApiClient {
                 .build();
 
         Response response = client.newCall(request).execute();
+    }
+
+    public JSONArray getBattleList(String sessionToken) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(serverUrl + "/user/battle-list")
+                .get()
+                .addHeader("session-token", sessionToken)
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        Response response = client.newCall(request).execute();
+        return new JSONArray(response.body().string());
     }
 }

@@ -1,5 +1,6 @@
 package com.whispersoffreedom.client;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Iterator;
 
 public class Client {
     public static final String SERVER_URL = "http://localhost:8080";
@@ -51,8 +53,7 @@ public class Client {
         switch (cmd) {
             case "start":
                 if (inBattle) {
-                    System.out.println("already in battle. starting the battle.");
-
+                    System.out.println("already in battle.");
                     return;
                 }
                 logger.info("starting battle...");
@@ -77,6 +78,23 @@ public class Client {
                 logger.info("entering existing battle...");
                 apiClient.enterBattle(t, currentSessionToken);
                 break;
+            case "list":
+                JSONArray battles = apiClient.getBattleList(currentSessionToken);
+                Iterator<Object> iter = battles.iterator();
+                StringBuilder sb = new StringBuilder();
+                sb.append("Clients | name              | id\n");
+                while (iter.hasNext()) {
+                    JSONObject battle = (JSONObject) iter.next();
+                    sb.append(String.valueOf(battle.getInt("clients")));
+                    sb.append("    | ")
+                            .append(battle.getString("name").substring(0, 20))
+                            .append(" | ")
+                            .append(battle.getString("battleId"))
+                    .append("\n");
+
+                }
+                System.out.println(sb.toString());
+                System.exit(0);
         }
     }
 
@@ -106,6 +124,7 @@ public class Client {
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
         }
+        logger.error("Connection lost");
     }
 
     private void identifyYourself() throws IOException, InterruptedException {

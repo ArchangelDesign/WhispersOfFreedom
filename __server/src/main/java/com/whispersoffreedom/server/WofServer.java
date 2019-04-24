@@ -134,6 +134,10 @@ public class WofServer {
         clients.remove(clientId);
     }
 
+    public static void clientIdentified(TcpConnection connection, WofPacket packet) {
+        getClient(packet.getClientId()).acceptTcpConnection(connection);
+    }
+
     private static String getClientIdByConnectionId(UUID connectionId) {
         for (Map.Entry<String, Client> entry : clients.entrySet())
             if (entry.getValue().getConnection().getConnectionId() == connectionId)

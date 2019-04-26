@@ -114,4 +114,20 @@ public class ApiClient {
         Response response = client.newCall(request).execute();
         return new JSONArray(response.body().string());
     }
+
+    public void renameBattle(String sessionToken, String name) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "{\n\t\"name\": \"" + name + "\"\n}");
+        Request request = new Request.Builder()
+                .url(serverUrl + "/user/rename-battle")
+                .post(body)
+                .addHeader("session-token", sessionToken)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("cache-control", "no-cache")
+                .build();
+
+        Response response = client.newCall(request).execute();
+    }
 }

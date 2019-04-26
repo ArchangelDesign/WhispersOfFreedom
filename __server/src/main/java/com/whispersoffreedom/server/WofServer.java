@@ -3,6 +3,7 @@ package com.whispersoffreedom.server;
 import com.whispersoffreedom.server.command.WofCommand;
 import com.whispersoffreedom.server.exception.*;
 import lombok.Getter;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +93,7 @@ public class WofServer {
         return result;
     }
 
-    public static void renameBattle(Client client, String newName) {
+    public static void renameBattle(@NonNull Client client, @NonNull String newName) {
         if (client.getCurrentBattle() == null || !client.isInBattle())
             throw new BattleNotFoundException();
 

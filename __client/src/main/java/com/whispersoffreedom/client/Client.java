@@ -87,14 +87,19 @@ public class Client {
                     JSONObject battle = (JSONObject) iter.next();
                     sb.append(String.valueOf(battle.getInt("clients")));
                     sb.append("    | ")
-                            .append(battle.getString("name").substring(0, 20))
+                            .append(battle.getString("name"))
                             .append(" | ")
                             .append(battle.getString("battleId"))
                     .append("\n");
 
                 }
                 System.out.println(sb.toString());
-                System.exit(0);
+                break;
+            case "rename":
+                System.out.print("new name: ");
+                String newName = readFromConsole();
+                apiClient.renameBattle(currentSessionToken, newName);
+                break;
         }
     }
 

@@ -96,7 +96,6 @@ public class WofServer {
     public static void renameBattle(@NonNull Client client, @NonNull String newName) {
         if (client.getCurrentBattle() == null || !client.isInBattle())
             throw new BattleNotFoundException();
-
         client.getCurrentBattle().rename(client, newName);
     }
 

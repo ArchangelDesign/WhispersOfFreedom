@@ -4,6 +4,9 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.util.UUID;
 
 public class Client {
@@ -24,6 +27,8 @@ public class Client {
     private Battle previousBattle = null;
 
     private TcpConnection connection;
+
+    private DatagramPacket udpPacket;
 
     Logger logger;
 
@@ -56,10 +61,23 @@ public class Client {
         connection.sendPacket(packet);
     }
 
+    public void sendUdpPacket(WofPacket packet) {
+        if (udpPacket == null)
+            return;
+        String data = packet.toJson();
+        DatagramPacket dp = new DatagramPacket(data.getBytes(), data.length(), udpPacket.getSocketAddress());
+        WofServer.sendUdpPacket(dp);
+    }
+
     public void acceptTcpConnection(TcpConnection conn) {
         logger.info(this.username + " is accepting TCP connection from " + conn.getRemoteAddress());
         connection = conn;
         conn.setClient(this);
+    }
+
+    public void acceptUdpConnection(DatagramPacket packet) {
+        logger.info("Accepting UDP connections on " + packet.getSocketAddress().toString());
+        udpPacket = packet;
     }
 
     public TcpConnection getConnection() {

@@ -22,17 +22,29 @@ public class TcpServer {
 
     private ServerSocket serverSocket;
 
+    private boolean running = true;
+
     private Logger logger = LoggerFactory.getLogger(TcpServer.class);
 
     private HashMap<UUID, TcpConnection> connections = new HashMap<>();
 
-    public TcpServer() throws IOException {
+    public TcpServer() {
         logger.info("Starting TCP server...");
-        serverSocket = new ServerSocket(port);
+        try {
+            serverSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         logger.info("TCP server started.");
         new Thread(this::watchdog).start();
-        while (true)
-            acceptConnection(serverSocket.accept());
+        while (running) {
+            try {
+                acceptConnection(serverSocket.accept());
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
+        }
+        logger.error("TCP server terminated");
     }
 
     private void acceptConnection(Socket socket) {

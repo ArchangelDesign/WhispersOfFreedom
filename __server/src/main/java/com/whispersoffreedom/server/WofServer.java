@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.util.*;
 
 public class WofServer {
@@ -23,12 +24,16 @@ public class WofServer {
 
     private static TcpServer tcpServer;
 
+    private static UdpServer udpServer;
+
     private static final int MAX_CLIENTS = 20;
 
     public static void initializeServer() throws IOException {
         if (initialized)
             throw new ServerAlreadyInitializedException();
-        tcpServer = new TcpServer();
+        new Thread(() -> tcpServer = new TcpServer()).start();
+        udpServer = new UdpServer();
+        new Thread(() -> udpServer.startListening()).start();
         initialized = true;
     }
 
@@ -144,5 +149,23 @@ public class WofServer {
                 if (entry.getValue().getConnection().getConnectionId() == connectionId)
                     return entry.getKey();
         throw new ClientNotFoundException();
+    }
+
+    public static void sendUdpPacket(DatagramPacket dp) {
+        try {
+            if (udpServer == null) {
+                logger.error("No UDP server.");
+                return;
+            }
+            udpServer.send(dp);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public static void clientIdentified(WofPacket wofPacket, DatagramPacket packet) {
+        Client c = clients.get(wofPacket.getClientId());
+        c.acceptUdpConnection(packet);
+        logger.info(String.format("Client %s connected via UDP from %s", c.getUsername(), packet.getSocketAddress().toString()));
     }
 }

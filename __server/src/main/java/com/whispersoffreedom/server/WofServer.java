@@ -140,8 +140,9 @@ public class WofServer {
 
     private static String getClientIdByConnectionId(UUID connectionId) {
         for (Map.Entry<String, Client> entry : clients.entrySet())
-            if (entry.getValue().getConnection().getConnectionId() == connectionId)
-                return entry.getKey();
+            if (entry.getValue().getConnection() != null)
+                if (entry.getValue().getConnection().getConnectionId() == connectionId)
+                    return entry.getKey();
         throw new ClientNotFoundException();
     }
 }

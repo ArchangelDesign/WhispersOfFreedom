@@ -78,6 +78,9 @@
     <Compile Include="Assets\script\network\Entity\Request\EnterServerRequest.cs" />
     <Compile Include="Assets\script\network\Entity\Response\GenericResponse.cs" />
     <Compile Include="Assets\script\network\Entity\WofCommand.cs" />
+    <Compile Include="Assets\script\UI\BattleListController.cs" />
+    <Compile Include="Assets\script\UI\MainMenuController.cs" />
+    <Compile Include="Assets\script\UI\ServerStatus.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>/Users/raffmartinez/WhispersOfDreedom/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

@@ -6,7 +6,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class ApiClient : MonoBehaviour
+public class ApiClient
 {
 
     // MAX wait time for response from REST server
@@ -44,12 +44,15 @@ public class ApiClient : MonoBehaviour
 
     private Thread receiveThread;
 
-    private void Start()
-    {
-        EnterServer("Raff");
-        //ListBattles();
-    }
+    private static ApiClient instance;
 
+    public static ApiClient getInstance()
+    {
+        if (instance == null)
+            instance = new ApiClient();
+
+        return instance;
+    }
 
     public void EnterServer(string username)
     {
@@ -60,6 +63,11 @@ public class ApiClient : MonoBehaviour
 
         string response = SendPostRequest("/user/enter", JsonUtility.ToJson(request));
         GenericResponse genericResponse = JsonUtility.FromJson<GenericResponse>(response);
+        if (genericResponse == null)
+        {
+            Debug.LogError("Cannot connect to server.");
+            return;
+        }
         if (genericResponse.sessionToken != null)
         {
             Debug.Log("received session token");
@@ -67,6 +75,25 @@ public class ApiClient : MonoBehaviour
             loggedIn = true;
             InitiateTcpConnection();
         }
+    }
+
+    public void LeaveServer()
+    {
+        Debug.Log("Dicsonnecting from server.");
+        DiconnectTcpClient();
+        DisconnectUdpClient();
+        loggedIn = false;
+    }
+
+    private void DiconnectTcpClient()
+    {
+        tcpClient.Dispose();
+        tcpConnected = false;
+    }
+
+    private void DisconnectUdpClient()
+    {
+        // @TODO
     }
 
     private void InitiateTcpConnection()
@@ -124,6 +151,16 @@ public class ApiClient : MonoBehaviour
     }
 
     public void TerminateBattle() { }
+
+    public bool IsLoggedIn()
+    {
+        return loggedIn;
+    }
+
+    public bool IsTcpClientConnected()
+    {
+        return tcpConnected;
+    }
 
     public Battle[] getBattles()
     {
@@ -216,7 +253,7 @@ public class ApiClient : MonoBehaviour
         Debug.Log("TCP data received: " + data);
         WofCommand cmd = JsonUtility.FromJson<WofCommand>(data);
 
-        switch (cmd.command)
+        switch (cmd.command.ToLower())
         {
             case "ping":
                 break;
@@ -224,9 +261,13 @@ public class ApiClient : MonoBehaviour
             case "ack":
                 Debug.Log("ACK");
                 break;
+
+            default:
+                Debug.LogError("Unhandled command from server: " + cmd.command);
+                break;
         }
 
-        Debug.LogError("Unhandled command from server: " + cmd.command);
+
     }
 
     private void TcpDataHandler()

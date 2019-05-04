@@ -6,17 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5fa5e4c9-9bae-4ba0-b88a-5f0252cab712" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Assets/script/network/Entity/NewClass.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Assets/script/network/Entity/WofCommand.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scenes/MainMenu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/script/network/ApiClient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/script/network/ApiClient.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/script/network/Entity/Response/NewClass.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/script/network/Entity/Response/GenericResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/script/network/Entity/Response/NewClass.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../__server/src/main/java/com/whispersoffreedom/server/WofServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../__server/src/main/java/com/whispersoffreedom/server/WofServer.java" afterDir="false" />
-    </list>
+    <list default="true" id="5fa5e4c9-9bae-4ba0-b88a-5f0252cab712" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -77,7 +67,7 @@
     <session id="-1233068153">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.3" value="2" />
           <entry key="project.opened" value="3" />
@@ -118,7 +108,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/whispersoffreedom/client/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
+            <state relative-caret-position="1199">
               <caret line="99" column="14" selection-start-line="99" selection-start-column="14" selection-end-line="99" selection-end-column="14" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -544,10 +534,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1716" />
+    <option name="x" value="1735" />
     <option name="y" value="23" />
-    <option name="width" value="1842" />
-    <option name="height" value="992" />
+    <option name="width" value="1823" />
+    <option name="height" value="989" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -751,11 +741,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1716" y="23" width="1842" height="992" extended-state="0" />
+    <frame x="1735" y="23" width="1823" height="989" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49555555" visible="true" weight="0.16777778" />
-      <window_info id="Structure" order="1" sideWeight="0.5044444" side_tool="true" visible="true" weight="0.16777778" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4960981" visible="true" weight="0.16956766" />
+      <window_info id="Structure" order="1" sideWeight="0.5039019" side_tool="true" visible="true" weight="0.16956766" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Capture Tool" order="4" />
@@ -781,7 +771,7 @@
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Maven Projects" order="5" />
-      <window_info active="true" anchor="right" id="Gradle" order="6" visible="true" weight="0.17944445" />
+      <window_info anchor="right" id="Gradle" order="6" weight="0.18135878" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
     </layout>
@@ -830,7 +820,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/whispersoffreedom/client/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
+        <state relative-caret-position="1199">
           <caret line="99" column="14" selection-start-line="99" selection-start-column="14" selection-end-line="99" selection-end-column="14" />
           <folding>
             <element signature="imports" expanded="true" />

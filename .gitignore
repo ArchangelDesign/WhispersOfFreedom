@@ -54,3 +54,11 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+__client/.idea/
+__client/build/
+__server/.idea
+__server/build
+__website/.idea
+.DS_Store
+

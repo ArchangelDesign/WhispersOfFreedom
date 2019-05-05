@@ -46,6 +46,16 @@ public class ApiClient
 
     private static ApiClient instance;
 
+    private long lastPing = DateTime.Now.Ticks;
+
+    private ulong lastTx = 0;
+
+    private ulong lastRx = 0;
+
+    private ulong totalTx = 0;
+
+    private ulong totalRx = 0;
+
     public static ApiClient getInstance()
     {
         if (instance == null)
@@ -124,7 +134,9 @@ public class ApiClient
         string response = SendGetRequest("/user/battle-list");
         if (response == null)
             return battles;
-        battles = JsonUtility.FromJson<Battle[]>(lastResponse);
+
+        battles = JsonHelper.FromJson<Battle>(response);
+   
         return battles;
     }
 
@@ -146,8 +158,6 @@ public class ApiClient
     public void CreateBattle() {
         if (inBattle)
             return;
-
-
     }
 
     public void TerminateBattle() { }
@@ -162,7 +172,7 @@ public class ApiClient
         return tcpConnected;
     }
 
-    public Battle[] getBattles()
+    public Battle[] GetBattles()
     {
         return battles;
     }
@@ -199,6 +209,10 @@ public class ApiClient
         while (!request.isDone)
             w = new WaitForSeconds(0.1f);
         Debug.Log("TX: " + request.uploadedBytes + " | RX" + request.downloadedBytes);
+        lastTx = request.uploadedBytes;
+        lastRx = request.downloadedBytes;
+        totalTx += request.uploadedBytes;
+        totalRx += request.downloadedBytes;
         lastResponseCode = request.responseCode;
         if (!request.isDone)
             Debug.LogError("NOT DONE");
@@ -226,6 +240,10 @@ public class ApiClient
 
         serverState = ServerState.RX;
         Debug.Log("TX: " + request.uploadedBytes + " | RX" + request.downloadedBytes);
+        lastTx = request.uploadedBytes;
+        lastRx = request.downloadedBytes;
+        totalTx += request.uploadedBytes;
+        totalRx += request.downloadedBytes;
         lastResponseCode = request.responseCode;
         if (request.isHttpError)
         {
@@ -256,6 +274,7 @@ public class ApiClient
         switch (cmd.command.ToLower())
         {
             case "ping":
+                lastPing = DateTime.Now.Ticks;
                 break;
 
             case "ack":
@@ -266,8 +285,21 @@ public class ApiClient
                 Debug.LogError("Unhandled command from server: " + cmd.command);
                 break;
         }
+    }
 
+    public long SecondsSinceLastPing()
+    {
+        return (DateTime.Now.Ticks - lastPing) / 10000000;
+    }
 
+    public string GetTotalRx()
+    {
+        return totalRx.ToString();
+    }
+
+    public string GetTotalTx()
+    {
+        return totalTx.ToString();
     }
 
     private void TcpDataHandler()
@@ -311,5 +343,12 @@ public class ApiClient
     private void OnError(string error)
     {
         Debug.LogError(error);
+    }
+
+    public void OnDestroy()
+    {
+        Debug.Log("ApiClient is terminating.");
+        tcpClient.Dispose();
+        //receiveThread.Abort();
     }
 }

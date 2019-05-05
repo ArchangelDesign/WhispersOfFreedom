@@ -1,11 +1,16 @@
 ﻿
+using System;
+
+[Serializable]
 public class Battle
 {
-    private string battleId { get; }
+    public string battleId;
 
-    private string name { get; }
+    public string name;
 
-    private int clients { get; }
+    public int clients;
+
+    public Battle() { }
 
     public Battle(string battleId, string name, int clients)
     {

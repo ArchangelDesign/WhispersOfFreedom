@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class WofServer {
@@ -26,7 +28,16 @@ public class WofServer {
 
     private static UdpServer udpServer;
 
+    /**
+     * Maximum number of connected clients allowed
+     */
     private static final int MAX_CLIENTS = 20;
+
+    /**
+     * Time in seconds after which client will be dropped
+     * if no TCP connection has been established
+     */
+    private static final int MAX_ZOMBIE_TIME = 30;
 
     public static void initializeServer() throws IOException {
         if (initialized)
@@ -34,6 +45,7 @@ public class WofServer {
         new Thread(() -> tcpServer = new TcpServer()).start();
         udpServer = new UdpServer();
         new Thread(() -> udpServer.startListening()).start();
+        new Thread(WofServer::dropZombies).start();
         initialized = true;
     }
 
@@ -167,5 +179,39 @@ public class WofServer {
         Client c = clients.get(wofPacket.getClientId());
         c.acceptUdpConnection(packet);
         logger.info(String.format("Client %s connected via UDP from %s", c.getUsername(), packet.getSocketAddress().toString()));
+    }
+
+    /**
+     * Each client is obligated to establish TCP connection
+     * with the server within MAX_ZOMBIE_TIME otherwise
+     * REST session will be terminated and client will have
+     * to start a new session. Unfortunately if there is no TCP
+     * connection there is no way of informing the client that
+     * the session has been terminated.
+     */
+    private static void dropZombies() {
+        while (true) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                logger.error(e.getMessage());
+            }
+            clients.entrySet().removeIf(c -> isZombie((c.getValue())));
+        }
+    }
+
+    /**
+     * Returns true if the client is a zombie
+     * and should be dropped.
+     * @param c Given client
+     * @return true if c is a zombie
+     */
+    private static boolean isZombie(Client c) {
+        if (c.getConnection() != null)
+            return false;
+
+        return c.getConnected()
+                .plus(MAX_ZOMBIE_TIME, ChronoUnit.SECONDS)
+                .isBefore(Instant.now());
     }
 }

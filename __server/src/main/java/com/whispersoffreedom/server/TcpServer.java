@@ -1,5 +1,6 @@
 package com.whispersoffreedom.server;
 
+import com.whispersoffreedom.server.exception.ClientNotFoundException;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,9 +78,18 @@ public class TcpServer {
             e.printStackTrace();
         }
 
-        logger.info("Client dropped " + socket.getRemoteSocketAddress());
-        WofServer.clientDropped(connection.getConnectionId());
-        connections.remove(id);
+        logger.info(
+                String.format(
+                        "Dropping client %s due to stream termination or network error.",
+                        socket.getRemoteSocketAddress())
+        );
+        try {
+            WofServer.clientDropped(connection.getConnectionId());
+        } catch (ClientNotFoundException e) {
+            logger.info("Client has not been assigned entity, will be dropped due to timeout.");
+        } finally {
+            connections.remove(id);
+        }
     }
 
     private void sendAck(PrintWriter out) {

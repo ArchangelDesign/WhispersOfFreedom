@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.time.Instant;
 import java.util.UUID;
 
 public class Client {
@@ -29,6 +30,9 @@ public class Client {
     private TcpConnection connection;
 
     private DatagramPacket udpPacket;
+
+    @Getter
+    private Instant connected = Instant.now();
 
     Logger logger;
 

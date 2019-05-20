@@ -76,10 +76,14 @@
     <Compile Include="Assets\script\network\ApiClient.cs" />
     <Compile Include="Assets\script\network\Entity\Battle.cs" />
     <Compile Include="Assets\script\network\Entity\Enums\ServerState.cs" />
+    <Compile Include="Assets\script\network\Entity\Request\EnterBattleRequest.cs" />
     <Compile Include="Assets\script\network\Entity\Request\EnterServerRequest.cs" />
+    <Compile Include="Assets\script\network\Entity\Request\IdentificationCommand.cs" />
     <Compile Include="Assets\script\network\Entity\Response\GenericResponse.cs" />
     <Compile Include="Assets\script\network\Entity\WofCommand.cs" />
+    <Compile Include="Assets\script\network\Utils\Encoding.cs" />
     <Compile Include="Assets\script\network\Utils\JsonHelper.cs" />
+    <Compile Include="Assets\script\network\WofUdpClient.cs" />
     <Compile Include="Assets\script\UI\BattleListController.cs" />
     <Compile Include="Assets\script\UI\MainMenuController.cs" />
     <Compile Include="Assets\script\UI\ServerStatus.cs" />

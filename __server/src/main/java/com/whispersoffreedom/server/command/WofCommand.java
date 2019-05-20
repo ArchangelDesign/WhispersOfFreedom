@@ -1,7 +1,7 @@
 package com.whispersoffreedom.server.command;
 
 import com.whispersoffreedom.server.TcpConnection;
-import com.whispersoffreedom.server.WofPacket;
+import com.whispersoffreedom.server.packet.WofPacket;
 import com.whispersoffreedom.server.exception.InvalidCommandReceived;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

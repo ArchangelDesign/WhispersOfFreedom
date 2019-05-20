@@ -2,7 +2,7 @@ package com.whispersoffreedom.server.command;
 
 import com.whispersoffreedom.server.BattleStatus;
 import com.whispersoffreedom.server.TcpConnection;
-import com.whispersoffreedom.server.WofPacket;
+import com.whispersoffreedom.server.packet.WofPacket;
 import com.whispersoffreedom.server.exception.NotInBattleException;
 
 public class StartBattle extends WofCommand {

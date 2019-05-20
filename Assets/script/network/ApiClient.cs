@@ -20,7 +20,7 @@ public class ApiClient
 
     private int TcpServerPort = 8081;
 
-    private string sessionToken;
+    private string sessionToken = null;
 
     private string lastResponse;
 
@@ -84,6 +84,7 @@ public class ApiClient
             sessionToken = genericResponse.sessionToken;
             loggedIn = true;
             InitiateTcpConnection();
+            InitiateUdpConnection();
         }
     }
 
@@ -93,6 +94,7 @@ public class ApiClient
         DiconnectTcpClient();
         DisconnectUdpClient();
         loggedIn = false;
+        sessionToken = null;
     }
 
     private void DiconnectTcpClient()
@@ -104,6 +106,11 @@ public class ApiClient
     private void DisconnectUdpClient()
     {
         // @TODO
+    }
+
+    public String GetClientId()
+    {
+        return sessionToken;
     }
 
     private void InitiateTcpConnection()
@@ -119,6 +126,11 @@ public class ApiClient
         {
             Debug.LogError("TCP ERROR: " + e.Message);
         }
+    }
+
+    private void InitiateUdpConnection()
+    {
+        WofUdpClient.GetInstance().StartClient();
     }
 
     private void IdentifyYourself()
@@ -153,6 +165,15 @@ public class ApiClient
     public void leaveBattle() {
         if (!inBattle)
             return;
+    }
+
+    public void JoinBattle(string battleId)
+    {
+        if (inBattle)
+            return;
+        string body = new EnterBattleRequest(battleId).ToJson();
+        string response = SendPostRequest("/user/enter-battle", body);
+
     }
 
     public void CreateBattle() {
@@ -204,6 +225,8 @@ public class ApiClient
         UploadHandlerRaw uploadHandler = new UploadHandlerRaw(rawBody);
         uploadHandler.contentType = "application/json";
         UnityWebRequest request = new UnityWebRequest(uri, method, downloadHandler, uploadHandler);
+        if (sessionToken != null)
+            request.SetRequestHeader("session-token", sessionToken);
         request.SendWebRequest();
         WaitForSeconds w;
         while (!request.isDone)
@@ -258,11 +281,10 @@ public class ApiClient
 
     private string BytesToString(byte[] bytes)
     {
-        return System.Text.Encoding.ASCII.GetString(bytes);
+        return Encoding.Decode(bytes);
     }
 
     private void OnDataReceived(string data) {
-        Debug.Log("Data received: " + data);
         lastResponse = data;
     }
 
@@ -316,7 +338,7 @@ public class ApiClient
             {
                 byte[] receivedBytes = new byte[length];
                 Array.Copy(buffer, 0, receivedBytes, 0, length);
-                tcpLastResponse = System.Text.Encoding.ASCII.GetString(receivedBytes);
+                tcpLastResponse = Encoding.Decode(receivedBytes);
                 OnTcpDataReceived(tcpLastResponse);
             }
         }
@@ -336,7 +358,7 @@ public class ApiClient
             return;
         }
 
-        byte[] rawData = System.Text.Encoding.ASCII.GetBytes(data);
+        byte[] rawData = Encoding.Encode(data);
         stream.Write(rawData, 0, rawData.Length);
     }
 
@@ -348,7 +370,8 @@ public class ApiClient
     public void OnDestroy()
     {
         Debug.Log("ApiClient is terminating.");
-        tcpClient.Dispose();
+        if (tcpClient != null)
+            tcpClient.Dispose();
         //receiveThread.Abort();
     }
 }

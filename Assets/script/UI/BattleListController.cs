@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BattleListController : MonoBehaviour
@@ -119,6 +120,7 @@ public class BattleListController : MonoBehaviour
 
     void OnJoinBattleClicked(string battleId)
     {
-        Debug.Log("Joining battle " + battleId);
+        apiClient.JoinBattle(battleId);
+        SceneManager.LoadScene("BattleLobby");
     }
 }

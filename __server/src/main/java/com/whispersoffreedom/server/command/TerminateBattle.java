@@ -1,7 +1,7 @@
 package com.whispersoffreedom.server.command;
 
 import com.whispersoffreedom.server.TcpConnection;
-import com.whispersoffreedom.server.WofPacket;
+import com.whispersoffreedom.server.packet.WofPacket;
 
 public class TerminateBattle extends WofCommand {
 

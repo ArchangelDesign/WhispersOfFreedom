@@ -2,6 +2,7 @@ package com.whispersoffreedom.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.whispersoffreedom.server.packet.WofPacket;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,7 @@ public class TcpConnection {
         lastPacket = pck;
         lastRead = Instant.now();
         logger.info("Packet received. Command: " + pck.getCommand());
+        // what a bad design
         WofServer.clientDataReceived(this, pck);
     }
 

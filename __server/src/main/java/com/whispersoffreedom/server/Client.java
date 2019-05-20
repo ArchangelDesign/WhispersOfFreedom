@@ -1,12 +1,14 @@
 package com.whispersoffreedom.server;
 
+import com.whispersoffreedom.server.packet.PingPacket;
+import com.whispersoffreedom.server.packet.StateUpdatePacket;
+import com.whispersoffreedom.server.packet.WofPacket;
+import com.whispersoffreedom.server.packet.WofPacketBroadcast;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -39,6 +41,7 @@ public class Client {
     public Client(String newUsername) {
         username = newUsername;
         logger = LoggerFactory.getLogger(String.format("Client [%s]", newUsername));
+        new Thread(this::heartbeat).start();
     }
 
     public void enterBattle(Battle battle) {
@@ -86,5 +89,33 @@ public class Client {
 
     public TcpConnection getConnection() {
         return connection;
+    }
+
+    /**
+     * Synchronization method. If in battle runs very often and
+     * sends current state to the client. Each client has their
+     * own thread to handle synchronization.
+     */
+    private void heartbeat() {
+        while (true) {
+            long delay = inBattle ? 300 : 5000;
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+            }
+
+//            if (udpPacket == null && inBattle) {
+//                logger.error(String.format("Client %s is in battle and is not connected via UDP. Dropping...", username));
+//                WofServer.dropClientById(id.toString());
+//                return;
+//            }
+
+            if (udpPacket == null)
+                continue;
+
+            String buff = new StateUpdatePacket(this).toJson();
+            udpPacket.setData(buff.getBytes());
+            WofServer.sendUdpPacket(udpPacket);
+        }
     }
 }

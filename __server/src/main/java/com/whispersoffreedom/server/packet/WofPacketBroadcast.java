@@ -1,4 +1,4 @@
-package com.whispersoffreedom.server;
+package com.whispersoffreedom.server.packet;
 
 public class WofPacketBroadcast extends WofPacket {
 

@@ -2,6 +2,7 @@ package com.whispersoffreedom.server;
 
 import com.whispersoffreedom.server.command.WofCommand;
 import com.whispersoffreedom.server.exception.*;
+import com.whispersoffreedom.server.packet.WofPacket;
 import lombok.Getter;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -142,8 +143,12 @@ public class WofServer {
         return clients.size();
     }
 
-    public static void clientDropped(UUID connectionId) {
+    public static void dropClientByConnectionId(UUID connectionId) {
         String clientId = getClientIdByConnectionId(connectionId);
+        dropClientById(clientId);
+    }
+
+    public static void dropClientById(String clientId) {
         Client client = clients.get(clientId);
         logger.info("Dropping " + client.getUsername());
         if (client.isInBattle())

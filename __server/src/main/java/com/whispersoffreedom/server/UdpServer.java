@@ -1,15 +1,18 @@
 package com.whispersoffreedom.server;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.whispersoffreedom.server.packet.PingPacket;
+import com.whispersoffreedom.server.packet.WofPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class UdpServer {
 
@@ -55,7 +58,13 @@ public class UdpServer {
     private void onDataReceived(DatagramPacket packet) {
         String data = new String(packet.getData(), 0, packet.getLength());
         logger.info(String.format("[%s] UDP packet received: %s", packet.getSocketAddress().toString(), data));
-        WofPacket wofPacket = new Gson().fromJson(data, WofPacket.class);
+        WofPacket wofPacket = null;
+        try {
+            wofPacket = new Gson().fromJson(data, WofPacket.class);
+        } catch (JsonSyntaxException ex) {
+            logger.error("Invalid JSON received via UDP. ");
+            return;
+        }
         if (!clients.containsKey(packet.getSocketAddress().toString())) {
             logger.info("New UDP client " + packet.getSocketAddress().toString());
             clients.put(packet.getSocketAddress().toString(), packet);
@@ -70,19 +79,7 @@ public class UdpServer {
     }
 
     private void watchdog() {
-        while (running) {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            clients.forEach((addr, datagramPacket) -> {
-                logger.info("sending upd packet");
-                String data = "{\"ping\":\"pong\"}";
-                DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), datagramPacket.getSocketAddress());
-                WofServer.sendUdpPacket(packet);
-            });
-        }
+
     }
 
     public void send(DatagramPacket dp) throws IOException {

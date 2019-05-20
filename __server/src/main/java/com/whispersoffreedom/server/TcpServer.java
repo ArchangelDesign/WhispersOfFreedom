@@ -1,11 +1,11 @@
 package com.whispersoffreedom.server;
 
 import com.whispersoffreedom.server.exception.ClientNotFoundException;
+import com.whispersoffreedom.server.packet.AckPacket;
+import com.whispersoffreedom.server.packet.PingPacket;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.net.*;
 import java.io.*;
@@ -84,7 +84,7 @@ public class TcpServer {
                         socket.getRemoteSocketAddress())
         );
         try {
-            WofServer.clientDropped(connection.getConnectionId());
+            WofServer.dropClientByConnectionId(connection.getConnectionId());
         } catch (ClientNotFoundException e) {
             logger.info("Client has not been assigned entity, will be dropped due to timeout.");
         } finally {
@@ -93,8 +93,9 @@ public class TcpServer {
     }
 
     private void sendAck(PrintWriter out) {
-        // @TODO
-        out.println("{\"command\":\"ack\"}");
+        AckPacket packet = new AckPacket();
+        out.println(packet.toJson());
+        out.flush(); // not sure if it's needed here
     }
 
     /**
@@ -106,7 +107,6 @@ public class TcpServer {
             try {
                 Thread.sleep(30000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
             connections.forEach((uuid, tcpConnection) -> {
                 if (tcpConnection.getLastTransmission().
@@ -115,7 +115,7 @@ public class TcpServer {
                     dropConnection(uuid);
                     return;
                 }
-                tcpConnection.sendPacket(new WofPacket().setCommand("ping"));
+                tcpConnection.sendPacket(new PingPacket());
             });
         }
     }

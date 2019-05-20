@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    private ApiClient apiClient = ApiClient.getInstance();
+    private WofUdpClient udpClient = WofUdpClient.GetInstance();
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -18,7 +21,8 @@ public class GameController : MonoBehaviour
 
     private void OnDestroy()
     {
-        ApiClient.getInstance().OnDestroy();
+        //apiClient.OnDestroy();
+        //udpClient.OnDestroy();
     }
 
 

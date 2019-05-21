@@ -5,6 +5,7 @@ import com.whispersoffreedom.server.Client;
 import java.time.Instant;
 
 public class StateUpdatePacket extends WofPacket {
+
     public StateUpdatePacket(Client client) {
         command = "state_update";
         params.put("inBattle", client.isInBattle() ? "true" : "false");

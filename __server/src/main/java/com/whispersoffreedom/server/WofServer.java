@@ -160,6 +160,14 @@ public class WofServer {
         getClient(packet.getClientId()).acceptTcpConnection(connection);
     }
 
+    /**
+     * Inefficient method of finding client's ID
+     * based on connection ID. Used only for dropping
+     * clients in case TCP connection has been lost.
+     *
+     * @param connectionId
+     * @return
+     */
     private static String getClientIdByConnectionId(UUID connectionId) {
         for (Map.Entry<String, Client> entry : clients.entrySet())
             if (entry.getValue().getConnection() != null)
@@ -168,6 +176,12 @@ public class WofServer {
         throw new ClientNotFoundException();
     }
 
+    /**
+     * Sends UDP packet to the client.
+     * Client address along with data is inside the packet.
+     *
+     * @param dp client's datagram packet
+     */
     public static void sendUdpPacket(DatagramPacket dp) {
         try {
             if (udpServer == null) {
@@ -180,6 +194,14 @@ public class WofServer {
         }
     }
 
+    /**
+     * Called by UdpServer whenever client sends
+     * identification packet synchronizing client
+     * with UDP server allowing broadcast
+     *
+     * @param wofPacket received packet
+     * @param packet raw packet, contains source address
+     */
     public static void clientIdentified(WofPacket wofPacket, DatagramPacket packet) {
         Client c = clients.get(wofPacket.getClientId());
         c.acceptUdpConnection(packet);

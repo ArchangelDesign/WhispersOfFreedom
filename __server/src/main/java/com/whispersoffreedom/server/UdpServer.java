@@ -35,7 +35,6 @@ public class UdpServer {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-        logger.error("UDP server stopped listening.");
     }
 
     public void startListening() {
@@ -53,6 +52,7 @@ public class UdpServer {
             }
             onDataReceived(packet);
         }
+        logger.error("UDP server stopped listening.");
     }
 
     private void onDataReceived(DatagramPacket packet) {

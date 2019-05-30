@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,12 +11,16 @@ public class MainMenuController : MonoBehaviour
     public GameObject battleListView;
     public Button connectButton;
     private ApiClient apiClient = ApiClient.getInstance();
+    private GameController gameController;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        gameController = FindObjectOfType<GameController>();
+        if (gameController == null)
+            throw new Exception("Game Controller not found in the scene.");
         connectButton.onClick.AddListener(OnConnectClicked);
     }
 
@@ -34,8 +39,10 @@ public class MainMenuController : MonoBehaviour
             return;
         }
         string username = usernameInput.text.Trim();
-        if (username == null)
+        if (username == null || username.Length < 4) {
+            gameController.Notification("Invalid username");
             return;
+        }
 
         if (username.Length < 4)
             return;

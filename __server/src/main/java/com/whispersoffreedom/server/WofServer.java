@@ -153,6 +153,7 @@ public class WofServer {
         logger.info("Dropping " + client.getUsername());
         if (client.isInBattle())
             clientLeavesBattle(client);
+        clients.get(clientId).destroy();
         clients.remove(clientId);
     }
 
@@ -240,5 +241,11 @@ public class WofServer {
         return c.getConnected()
                 .plus(MAX_ZOMBIE_TIME, ChronoUnit.SECONDS)
                 .isBefore(Instant.now());
+    }
+
+    public static void leaveServer(String sessionToken) {
+        logger.info(String.format("Client %s is disconnecting...", sessionToken));
+        clients.get(sessionToken).destroy();
+        dropClientById(sessionToken);
     }
 }

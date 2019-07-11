@@ -33,6 +33,8 @@ public class Client {
 
     private DatagramPacket udpPacket;
 
+    private boolean alive = true;
+
     @Getter
     private Instant connected = Instant.now();
 
@@ -91,13 +93,17 @@ public class Client {
         return connection;
     }
 
+    public void destroy() {
+        alive = false;
+    }
+
     /**
      * Synchronization method. If in battle runs very often and
      * sends current state to the client. Each client has their
      * own thread to handle synchronization.
      */
     private void heartbeat() {
-        while (true) {
+        while (alive) {
             long delay = inBattle ? 300 : 5000;
             try {
                 Thread.sleep(delay);

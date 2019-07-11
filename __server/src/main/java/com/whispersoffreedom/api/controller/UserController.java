@@ -73,4 +73,11 @@ public class UserController {
         WofServer.renameBattle(WofServer.getClient(sessionToken), request.getName());
     }
 
+    @PostMapping("/disconnect")
+    public void disconnectClient(
+            @RequestHeader(name = "session-token") String sessionToken
+    ) {
+        WofServer.leaveServer(sessionToken);
+    }
+
 }

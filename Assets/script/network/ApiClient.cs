@@ -6,6 +6,12 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 
+public class ServerStats
+{
+    public int clientCount;
+    public int battleCount;
+}
+
 public class ApiClient
 {
 
@@ -56,6 +62,8 @@ public class ApiClient
 
     private ulong totalRx = 0;
 
+    private ServerStats serverStats = new ServerStats();
+
     public static ApiClient getInstance()
     {
         if (instance == null)
@@ -91,6 +99,7 @@ public class ApiClient
     public void LeaveServer()
     {
         Debug.Log("Dicsonnecting from server.");
+        SendPostRequest("/user/disconnect", "{\"empy\":\"empty\"}");
         DiconnectTcpClient();
         DisconnectUdpClient();
         loggedIn = false;
@@ -105,6 +114,7 @@ public class ApiClient
 
     private void DisconnectUdpClient()
     {
+        // Should be disconnected after TCP goes offline
         // @TODO
     }
 
@@ -322,6 +332,17 @@ public class ApiClient
     public string GetTotalTx()
     {
         return totalTx.ToString();
+    }
+
+    public void reportStats(int clientCount, int battleCount)
+    {
+        serverStats.battleCount = battleCount;
+        serverStats.clientCount = clientCount;
+    }
+
+    public ServerStats getStats()
+    {
+        return serverStats;
     }
 
     private void TcpDataHandler()

@@ -10,9 +10,11 @@ public class WofUdpClient
     private UdpClient client;
     private Thread receiveThread;
     private string lastRawPacket;
+    private GenericResponse lastPacket;
     private bool serverAlive = true;
     private bool connected = false;
     private IPEndPoint endpoint;
+    private ApiClient apiClient = ApiClient.getInstance();
 
     public static WofUdpClient GetInstance()
     {
@@ -72,15 +74,18 @@ public class WofUdpClient
         {
             try
             {
-
                 byte[] dataReceived = client.Receive(ref endpoint);
                 lastRawPacket = System.Text.Encoding.ASCII.GetString(dataReceived);
-                Debug.Log("UDP data received: " + lastRawPacket);
+                //Debug.Log("UDP data received: " + lastRawPacket);
+                lastPacket = JsonUtility.FromJson<GenericResponse>(lastRawPacket);
+                apiClient.reportStats(
+                    System.Convert.ToInt32(lastPacket.parameters.clientCount),
+                    System.Convert.ToInt32(lastPacket.parameters.battleCount));
             } catch (Exception e)
             {
                 connected = false;
                 serverAlive = false;
-                Debug.LogError("UDP receive error: " + e.StackTrace);
+                Debug.LogError("UDP receive error: " + e.Message);
             }
         }
         Debug.Log("UDP client went offline.");

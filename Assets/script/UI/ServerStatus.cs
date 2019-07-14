@@ -10,6 +10,7 @@ public class ServerStatus : MonoBehaviour
     public Text loggedInStatusText;
     public Text tcpStatusText;
     public Text transferText;
+    public Text serverLoadText;
 
     // Start is called before the first frame update
     void Start()
@@ -38,5 +39,8 @@ public class ServerStatus : MonoBehaviour
             tcpStatusText.color = new Color(255, 255, 255);
 
         transferText.text = "RX: " + apiClient.GetTotalRx() + " TX: " + apiClient.GetTotalTx();
+
+        serverLoadText.text = "Clients online: " + apiClient.getStats().clientCount +
+            " Battles in progress: " + apiClient.getStats().battleCount;
     }
 }

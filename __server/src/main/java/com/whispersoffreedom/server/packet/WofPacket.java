@@ -21,7 +21,7 @@ public class WofPacket {
     protected String command;
     protected String arg1;
     protected String memo;
-    protected HashMap<String, String> params = new HashMap<>();
+    protected HashMap<String, String> parameters = new HashMap<>();
     // Packets are also used by UDP server
     protected Instant timestamp = Instant.now();
 

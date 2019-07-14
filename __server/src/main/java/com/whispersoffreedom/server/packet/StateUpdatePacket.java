@@ -1,6 +1,7 @@
 package com.whispersoffreedom.server.packet;
 
 import com.whispersoffreedom.server.Client;
+import com.whispersoffreedom.server.WofServer;
 
 import java.time.Instant;
 
@@ -8,14 +9,16 @@ public class StateUpdatePacket extends WofPacket {
 
     public StateUpdatePacket(Client client) {
         command = "state_update";
-        params.put("inBattle", client.isInBattle() ? "true" : "false");
-        params.put("connected", client.getConnected().toString());
-        params.put("currentTime", Instant.now().toString());
+        parameters.put("inBattle", client.isInBattle() ? "true" : "false");
+        parameters.put("connected", client.getConnected().toString());
+        parameters.put("currentTime", Instant.now().toString());
+        parameters.put("clientCount", String.valueOf(WofServer.getClientCount()));
+        parameters.put("battleCount", String.valueOf(WofServer.getBattleCount()));
         if (!client.isInBattle())
             return;
 
-        params.put("battleId", client.getCurrentBattle().getBattleId());
-        params.put("battleName", client.getCurrentBattle().getName());
-        params.put("battleState", client.getCurrentBattle().getStatus().toString());
+        parameters.put("battleId", client.getCurrentBattle().getBattleId());
+        parameters.put("battleName", client.getCurrentBattle().getName());
+        parameters.put("battleState", client.getCurrentBattle().getStatus().toString());
     }
 }

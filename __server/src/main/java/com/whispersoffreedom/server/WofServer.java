@@ -139,6 +139,10 @@ public class WofServer {
         return getClientCount() >= MAX_CLIENTS;
     }
 
+    public static int getBattleCount() {
+        return battles.size();
+    }
+
     public static int getClientCount() {
         return clients.size();
     }

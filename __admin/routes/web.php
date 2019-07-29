@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::prefix('user')->group(function() {
+    Route::get('/login', 'UserController@getLogin')->name('login');
+    Route::post('/login', 'UserController@doLogin')->name('do-login');
+});
+

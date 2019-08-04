@@ -5,6 +5,8 @@ namespace App\Services;
 
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Setup;
 
 class DatabaseService
@@ -20,7 +22,7 @@ class DatabaseService
      * @param string $user
      * @param string $password
      * @param string $dbName
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function __construct(string $host, string $user, string $password, string $dbName)
     {
@@ -53,11 +55,28 @@ class DatabaseService
      * @param string $entity
      * @param $identifier
      * @return object|null
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function fetchEntity(string $entity, $identifier) {
         return $this->entityManager->find($entity, $identifier);
+    }
+
+    /**
+     * @param $entity
+     * @throws ORMException
+     */
+    public function persist($entity)
+    {
+        $this->getEntityManager()->persist($entity);
+    }
+
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function flush() {
+        $this->getEntityManager()->flush();
     }
 }

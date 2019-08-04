@@ -14,6 +14,6 @@ class UserController extends Controller
     }
 
     public function doLogin(UserService $db, Request $request) {
-        $db->fetchUserByEmail('');
+
     }
 }

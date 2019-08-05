@@ -26,15 +26,20 @@ class UserService
 
     public function fetchUserByEmail(string $email)
     {
-        $query = $this->databaseService->getEntityManager()->createQuery(
-            "select u from App\Entities\User u "
-            . "where u.email like :email"
-        )->setParameter('email', $email);
-        $result = $query->getResult();
+
+        $result = $this->databaseService
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('u')
+            ->from('App\Entities\User', 'u')
+            ->where('u.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()->getOneOrNullResult();
+
         var_dump($result);
     }
 
-    public function registerUser(string $email, string $username)
+    public function registerUser(string $email, string $username, string $password)
     {
 
     }

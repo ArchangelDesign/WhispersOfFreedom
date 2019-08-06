@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Entities\User;
 use App\Entities\UserRole;
 use App\Exceptions\UserAlreadyRegisteredException;
+use App\Exceptions\UsernameAlreadyInUseException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -63,6 +64,23 @@ class UserService
     }
 
     /**
+     * @param string $username
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function fetchUserByUsername(string $username)
+    {
+        return $this->databaseService
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('u')
+            ->from('App\Entities\User', 'u')
+            ->where('u.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * @param string $email
      * @param string $username
      * @param string $password
@@ -70,11 +88,15 @@ class UserService
      * @throws ORMException
      * @throws UserAlreadyRegisteredException
      * @throws OptimisticLockException
+     * @throws UsernameAlreadyInUseException
      */
     public function registerUser(string $email, string $username, string $password)
     {
         if ($this->fetchUserByEmail($email))
             throw new UserAlreadyRegisteredException();
+
+        if ($this->fetchUserByUsername($username))
+            throw new UsernameAlreadyInUseException();
 
         $userEntity = new User();
         $userEntity->setEmail(strtolower($email))

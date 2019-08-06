@@ -8,7 +8,7 @@
             <li>{{$error}}</li>
         @endforeach
     @endif
-    <input name="email" type="text">
+    <input name="email" type="text" value="{{ session('email') ?? '' }}">
     <input name="username" type="text">
     <input name="password" type="password">
     <input type="submit" value="Login">

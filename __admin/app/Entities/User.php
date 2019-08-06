@@ -47,9 +47,18 @@ class User
 
     /**
      * @var int
-     * @Column(name="registration_date", type="datetime", options={"default": "CURRENT_TIMESTAMP"}, nullable=false)
+     * @Column(name="registration_date", type="datetime", nullable=false)
      */
     protected $registrationDate;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->registrationDate = now();
+    }
+
 
     /**
      * @return string

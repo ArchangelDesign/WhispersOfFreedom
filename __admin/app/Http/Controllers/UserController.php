@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UserAlreadyRegisteredException;
+use App\Exceptions\UsernameAlreadyInUseException;
 use App\Providers\DatabaseProvider;
 use App\Services\DatabaseService;
 use App\Services\UserService;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -26,13 +33,36 @@ class UserController extends Controller
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required|regex:/(?=.{8,})(?=.*[0-9])(?=.*[A-Z])/i',
-            'username' => 'required|length'
+            'username' => 'required|Min:4'
         ]);
 
         $username = $validated['username'];
         $password = $validated['password'];
         $email = $validated['email'];
 
-        $userService->registerUser($email, $username, $password);
+        try {
+            $userService->registerUser($email, $username, $password);
+        } catch (UserAlreadyRegisteredException $e) {
+            return Redirect::route('register')->withErrors([
+                'Already registered' => 'Email has already been registered'
+            ]);
+        } catch (UsernameAlreadyInUseException $e) {
+            return Redirect::route('register')->withErrors([
+                'Username in use' => 'Username is already in use.'
+            ])->with('email', $email);
+        } catch (NonUniqueResultException $e) {
+            return Redirect::route('register')->withErrors([
+                'NonUniqueResultException' => $e->getMessage()
+            ]);
+        } catch (OptimisticLockException $e) {
+            return Redirect::route('register')->withErrors([
+                'OptimisticLockException' => $e->getMessage()
+            ]);
+        } catch (ORMException $e) {
+            return Redirect::route('register')->withErrors([
+                'ORMException' => $e->getMessage()
+            ]);
+        }
+        echo "OK";
     }
 }

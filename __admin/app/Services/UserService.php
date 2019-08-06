@@ -4,8 +4,11 @@
 namespace App\Services;
 
 
+use App\Entities\User;
 use App\Entities\UserRole;
+use App\Exceptions\UserAlreadyRegisteredException;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 
 class UserService
@@ -24,10 +27,32 @@ class UserService
         $this->databaseService = $db;
     }
 
+    private function hashPassword(string $password): string
+    {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    private function passwordValid(string $password, string $hash): bool
+    {
+        return password_verify($password, $hash);
+    }
+
+    private function verifyPassword(User $user, string $password): bool
+    {
+        if (empty($user))
+            return false;
+
+        return $this->passwordValid($password, $user->getPassword());
+    }
+
+    /**
+     * @param string $email
+     * @return User|null
+     * @throws NonUniqueResultException
+     */
     public function fetchUserByEmail(string $email)
     {
-
-        $result = $this->databaseService
+        return $this->databaseService
             ->getEntityManager()
             ->createQueryBuilder()
             ->select('u')
@@ -35,13 +60,29 @@ class UserService
             ->where('u.email = :email')
             ->setParameter('email', $email)
             ->getQuery()->getOneOrNullResult();
-
-        var_dump($result);
     }
 
+    /**
+     * @param string $email
+     * @param string $username
+     * @param string $password
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws UserAlreadyRegisteredException
+     * @throws OptimisticLockException
+     */
     public function registerUser(string $email, string $username, string $password)
     {
+        if ($this->fetchUserByEmail($email))
+            throw new UserAlreadyRegisteredException();
 
+        $userEntity = new User();
+        $userEntity->setEmail(strtolower($email))
+            ->setUsername($username)
+            ->setPassword($this->hashPassword($password));
+
+        $this->databaseService->persist($userEntity);
+        $this->databaseService->flush();
     }
 
     /**

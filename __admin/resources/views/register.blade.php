@@ -41,7 +41,6 @@
 
                             <button type="submit" class="btn btn-info">Register</button>
 
-
                         </div>
 
                     </form>

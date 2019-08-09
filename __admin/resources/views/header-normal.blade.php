@@ -47,11 +47,16 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="#">Link <span class="sr-only">(current)</span></a>
+                    <a href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li>
+                    <a href="https://github.com/ArchangelDesign/WhispersOfFreedom">GitHub repository</a>
+                </li>
+                <li><a href="https://www.youtube.com/playlist?list=PLbaAAg7kQaeGxsT3mtIoBC3eHiZrf86BW">YouTube live
+                        development</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Link</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Account <span class="caret"></span></a>

@@ -2,6 +2,26 @@
 
 <div class="container">
 
+    <div class="jumbotron">
+        <h2>Whispers of Freedom
+            <small>Operation Tempest</small>
+        </h2>
+        <media>
+            <div class="media-left">
+
+                <img style="width: 120px" class="media-object" src="/img/Lokajski_-_Poczta_Główna_(1944).jpg">
+            </div>
+            <div class="media-body">
+                <p>In the summer of 1944, Polish underground resistance, led by the Home Army,
+                    attempted to liberate Warsaw from German occupation.
+                    WoF is attempting to replicate that experience by allowing you to command armed forces on the
+                    streets of 1944 Warsaw in an online tactical simulation.
+                    Join opensource development on GitHub or beta-testing.</p>
+            </div>
+        </media>
+    </div>
+
+
     <div class="row">
 
         <div class="col-lg-4">

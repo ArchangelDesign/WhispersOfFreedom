@@ -9,7 +9,7 @@
         <media>
             <div class="media-left">
 
-                <img style="width: 120px" class="media-object" src="/img/Lokajski_-_Poczta_Główna_(1944).jpg">
+                <img style="width: 120px" class="media-object" src="/img/lokajski_poczta_glowna_1944_.jpg">
             </div>
             <div class="media-body">
                 <p>In the summer of 1944, Polish underground resistance, led by the Home Army,

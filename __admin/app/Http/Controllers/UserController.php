@@ -48,7 +48,7 @@ class UserController extends Controller
             ]);
         } catch (UsernameAlreadyInUseException $e) {
             return Redirect::route('register')->withErrors([
-                'Username in use' => 'Username is already in use.'
+                'username' => 'Username is already in use.'
             ])->with('email', $email);
         } catch (NonUniqueResultException $e) {
             return Redirect::route('register')->withErrors([

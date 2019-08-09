@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="/css/app.css">
 
     <meta name="theme-color" content="#fafafa">
 </head>
@@ -26,7 +27,7 @@
 <![endif]-->
 
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-static-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">

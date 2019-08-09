@@ -12,8 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->name('home');
 
 Route::prefix('user')->group(function () {
     Route::get('/login', 'UserController@getLogin')->name('login');

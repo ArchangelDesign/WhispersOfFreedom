@@ -16,7 +16,7 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function doLogin(UserService $db, Request $request)
+    public function doLogin(UserService $userService, Request $request)
     {
 
 //        $db->registerUser('');
@@ -59,5 +59,10 @@ class UserController extends Controller
             ]);
         }
         return view('registration-success');
+    }
+
+    public function newsletterSignup(Request $request)
+    {
+
     }
 }

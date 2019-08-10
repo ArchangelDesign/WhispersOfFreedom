@@ -24,5 +24,6 @@ Route::prefix('user')->group(function () {
     Route::get('/register', function () {
         return view('register');
     })->name('register');
+    Route::post('/newsletter/signup', 'UserController@signupForNewsletter')->name('newsletter-signup');
 });
 

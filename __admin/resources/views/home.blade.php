@@ -21,6 +21,24 @@
         </media>
     </div>
 
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p>Sign up for a newsletter</p>
+                </div>
+                <div class="panel-body">
+                    <div class="input-group">
+                        <input id="newsletter-email" type="email" class="form-control" placeholder="email address">
+                        <span class="input-group-btn">
+                            <button id="newsletter-signup-button" class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="row">
 
@@ -83,5 +101,27 @@
         </div>
 
     </div>
+</div>
 
-@include('footer-normal')
+    @include('footer-normal')
+
+    <script>
+        $(function () {
+            $("#newsletter-signup-button").click(signup);
+        });
+
+        function signup() {
+            let email = $("#newsletter-email").val();
+            $.ajax({
+                type: "POST",
+                url: "/user/newsletter/signup",
+                data: {'email': email },
+                success: function (res) {
+                    alert("Success " + res);
+                },
+                error: function (res) {
+                    alert("Error " + res);
+                }
+            });
+        }
+    </script>

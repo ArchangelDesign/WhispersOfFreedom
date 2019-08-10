@@ -16,11 +16,6 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function getLogin()
-    {
-        return view('login');
-    }
-
     public function doLogin(UserService $db, Request $request)
     {
 
@@ -63,6 +58,6 @@ class UserController extends Controller
                 'ORMException' => $e->getMessage()
             ]);
         }
-        echo "OK";
+        return view('registration-success');
     }
 }

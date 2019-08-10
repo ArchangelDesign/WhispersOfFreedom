@@ -16,7 +16,9 @@ Route::get('/', function () {
 })->name('home');
 
 Route::prefix('user')->group(function () {
-    Route::get('/login', 'UserController@getLogin')->name('login');
+    Route::get('/login', function () {
+        return view('login');
+    })->name('login');
     Route::post('/login', 'UserController@doLogin')->name('do-login');
     Route::post('/register', 'UserController@doRegister')->name('do-register');
     Route::get('/register', function () {

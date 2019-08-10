@@ -61,7 +61,7 @@ class UserController extends Controller
         return view('registration-success');
     }
 
-    public function newsletterSignup(Request $request)
+    public function newsletterSignup(Request $request, UserService $userService)
     {
 
     }

@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Entities\NewsletterRecipient;
 use App\Entities\User;
 use App\Entities\UserRole;
 use App\Exceptions\UserAlreadyRegisteredException;
@@ -28,16 +29,30 @@ class UserService
         $this->databaseService = $db;
     }
 
+    /**
+     * @param string $password
+     * @return string
+     */
     private function hashPassword(string $password): string
     {
         return password_hash($password, PASSWORD_BCRYPT);
     }
 
+    /**
+     * @param string $password
+     * @param string $hash
+     * @return bool
+     */
     private function passwordValid(string $password, string $hash): bool
     {
         return password_verify($password, $hash);
     }
 
+    /**
+     * @param User $user
+     * @param string $password
+     * @return bool
+     */
     private function verifyPassword(User $user, string $password): bool
     {
         if (empty($user))
@@ -137,5 +152,40 @@ class UserService
         )->setParameter('name', $name);
 
         return $query->getOneOrNullResult();
+    }
+
+    /**
+     * @param string $email
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function fetchNewsletterRecipient(string $email)
+    {
+        return $this->databaseService
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('r')
+            ->from('App\Entities\NewsletterRecipient', 'r')
+            ->where('r.email like :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * @param string $email
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function signupForNewsletter(string $email)
+    {
+        if ($this->fetchNewsletterRecipient($email))
+            return;
+
+        $entity = new NewsletterRecipient();
+        $entity->setEmail($email);
+        $this->databaseService->persist($entity);
+        $this->databaseService->flush();
     }
 }

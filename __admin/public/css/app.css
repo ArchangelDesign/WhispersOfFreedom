@@ -46,6 +46,10 @@ body {
     color: #252525;
 }
 
+.navbar-toggle .icon-bar {
+    background-color: #b8434e;
+}
+
 a {
     color: #b8434e;
 }

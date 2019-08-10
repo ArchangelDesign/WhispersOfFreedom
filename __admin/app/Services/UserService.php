@@ -180,6 +180,9 @@ class UserService
      */
     public function signupForNewsletter(string $email)
     {
+        if (empty($email))
+            return;
+
         if ($this->fetchNewsletterRecipient($email))
             return;
 

@@ -10,6 +10,8 @@ use App\Services\UserService;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Exception;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -63,6 +65,12 @@ class UserController extends Controller
 
     public function newsletterSignup(Request $request, UserService $userService)
     {
+        try {
+            $userService->signupForNewsletter(strtolower($request->get('email')));
+        } catch (Exception $e) {
+            return response()->json(['result' => false, 'message' => $e->getMessage()]);
+        }
 
+        return response()->json(['result' => true, 'message' => 'OK']);
     }
 }

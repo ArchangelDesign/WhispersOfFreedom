@@ -13,6 +13,7 @@ class NewsletterRecipient
 {
     /**
      * @var integer
+     * @Column(type="integer")
      * @Id
      * @GeneratedValue
      */
@@ -35,7 +36,7 @@ class NewsletterRecipient
      */
     public function __construct()
     {
-        $this->createdDate = time();
+        $this->createdDate = now();
     }
 
     /**

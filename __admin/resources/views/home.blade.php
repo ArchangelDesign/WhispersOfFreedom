@@ -29,6 +29,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="input-group">
+                        @csrf
                         <input id="newsletter-email" type="email" class="form-control" placeholder="email address">
                         <span class="input-group-btn">
                             <button id="newsletter-signup-button" class="btn btn-default" type="button">Go!</button>
@@ -112,15 +113,23 @@
 
         function signup() {
             let email = $("#newsletter-email").val();
+            let token = $('[name="_token"]').val();
+            let regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if(!regex.test(email)) {
+                alert('Invalid email address.');
+                return;
+            }
             $.ajax({
                 type: "POST",
                 url: "/user/newsletter/signup",
-                data: {'email': email },
+                data: {'email': email, '_token': token},
                 success: function (res) {
-                    alert("Success " + res);
-                },
-                error: function (res) {
-                    alert("Error " + res);
+                    let result = res.result;
+                    let message = res.message;
+                    if (result)
+                        alert("Thank you for your interest. We will not spam you :)");
+                    else
+                        alert("Something went wrong: " + message);
                 }
             });
         }

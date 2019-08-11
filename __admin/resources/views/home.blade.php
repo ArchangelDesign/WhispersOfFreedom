@@ -104,33 +104,54 @@
     </div>
 </div>
 
-    @include('footer-normal')
+<div class="modal fade" id="confirmation" tabindex="-1" role="dialog" aria-labelledby="confirmation-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="confirmation-label">Subscription confirmed</h4>
+            </div>
+            <div class="modal-body">
+                <p id="validation-error-message">Thank you for your interest. Your subscription has been confirmed.
+                From time to time we will send you and update on progress and eventually an invitation to beta testing.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <script>
-        $(function () {
-            $("#newsletter-signup-button").click(signup);
-        });
+@include('footer-normal')
 
-        function signup() {
-            let email = $("#newsletter-email").val();
-            let token = $('[name="_token"]').val();
-            let regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if(!regex.test(email)) {
-                alert('Invalid email address.');
-                return;
-            }
-            $.ajax({
-                type: "POST",
-                url: "/user/newsletter/signup",
-                data: {'email': email, '_token': token},
-                success: function (res) {
-                    let result = res.result;
-                    let message = res.message;
-                    if (result)
-                        alert("Thank you for your interest. We will not spam you :)");
-                    else
-                        alert("Something went wrong: " + message);
-                }
-            });
+<script>
+    $(function () {
+        $("#newsletter-signup-button").click(signup);
+    });
+
+    function signup() {
+        let email = $("#newsletter-email").val();
+        let token = $('[name="_token"]').val();
+        let regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!regex.test(email)) {
+            alert('Invalid email address.');
+            return;
         }
-    </script>
+        $.ajax({
+            type: "POST",
+            url: "/user/newsletter/signup",
+            data: {'email': email, '_token': token},
+            success: function (res) {
+                let result = res.result;
+                let message = res.message;
+                if (result) {
+                    $("#newsletter-email").val('');
+                    $("#confirmation").modal();
+                } else {
+                    alert("Something went wrong: " + message);
+                }
+            }
+        });
+    }
+</script>

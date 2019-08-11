@@ -114,7 +114,7 @@
             </div>
             <div class="modal-body">
                 <p id="validation-error-message">Thank you for your interest. Your subscription has been confirmed.
-                From time to time we will send you and update on progress and eventually an invitation to beta testing.</p>
+                From time to time we will send you an update on progress and eventually an invitation to beta testing.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>

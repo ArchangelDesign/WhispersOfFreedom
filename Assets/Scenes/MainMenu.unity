@@ -374,10 +374,10 @@ RectTransform:
   m_Father: {fileID: 1538397747}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 481.7, y: -318.1}
-  m_SizeDelta: {x: 527.5, y: 298.3}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 101.4875, y: -81}
+  m_SizeDelta: {x: -222.975, y: -182}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &308587431
 MonoBehaviour:
@@ -782,7 +782,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 584692166}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.93766665
+  m_Size: 0.74333334
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2065,6 +2065,8 @@ GameObject:
   - component: {fileID: 1538397746}
   - component: {fileID: 1538397745}
   - component: {fileID: 1538397744}
+  - component: {fileID: 1538397749}
+  - component: {fileID: 1538397748}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2159,6 +2161,43 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1538397748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538397743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 2100000, guid: a21029bfe3d6e4d889f0f05f26cd76c7, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+--- !u!222 &1538397749
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538397743}
+  m_CullTransparentMesh: 0
 --- !u!1 &1586754243
 GameObject:
   m_ObjectHideFlags: 0

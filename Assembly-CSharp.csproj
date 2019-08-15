@@ -86,6 +86,8 @@
     <Compile Include="Assets\script\network\WofUdpClient.cs" />
     <Compile Include="Assets\script\UI\BattleListController.cs" />
     <Compile Include="Assets\script\UI\MainMenuController.cs" />
+    <Compile Include="Assets\script\UI\Notification.cs" />
+    <Compile Include="Assets\script\UI\NotificationController.cs" />
     <Compile Include="Assets\script\UI\ServerStatus.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>/Users/raff/Documents/WhispersOfFreedom/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

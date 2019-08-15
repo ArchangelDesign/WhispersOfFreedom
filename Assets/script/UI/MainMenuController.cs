@@ -12,6 +12,7 @@ public class MainMenuController : MonoBehaviour
     public Button connectButton;
     private ApiClient apiClient = ApiClient.getInstance();
     private GameController gameController;
+    private Notification NotificationController;
 
 
 
@@ -19,6 +20,7 @@ public class MainMenuController : MonoBehaviour
     void Start()
     {
         gameController = FindObjectOfType<GameController>();
+        NotificationController = FindObjectOfType<Notification>();
         if (gameController == null)
             throw new Exception("Game Controller not found in the scene.");
         connectButton.onClick.AddListener(OnConnectClicked);
@@ -40,7 +42,7 @@ public class MainMenuController : MonoBehaviour
         }
         string username = usernameInput.text.Trim();
         if (username == null || username.Length < 4) {
-            gameController.Notification("Invalid username");
+            NotificationController.Error("Test error notification");            
             return;
         }
 

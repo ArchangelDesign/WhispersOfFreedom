@@ -12,6 +12,9 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
 use http\Env\Response;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -25,6 +28,11 @@ class UserController extends Controller
 //        $db->fetchUserByEmail('');
     }
 
+    /**
+     * @param UserService $userService
+     * @param Request $request
+     * @return Factory|RedirectResponse|View
+     */
     public function doRegister(UserService $userService, Request $request)
     {
         $validated = $request->validate([
@@ -63,6 +71,11 @@ class UserController extends Controller
         return view('registration-success');
     }
 
+    /**
+     * @param Request $request
+     * @param UserService $userService
+     * @return JsonResponse
+     */
     public function newsletterSignup(Request $request, UserService $userService)
     {
         try {
@@ -72,5 +85,23 @@ class UserController extends Controller
         }
 
         return response()->json(['result' => true, 'message' => 'OK']);
+    }
+
+    /**
+     * @param Request $request
+     * @param UserService $userService
+     * @return JsonResponse
+     * @throws NonUniqueResultException
+     */
+    public function verifyCredentials(Request $request, UserService $userService)
+    {
+        $user = $userService->fetchUserByEmail($request->get('email'));
+        if (!$user)
+            return response()->json([], 400);
+
+        if (!$userService->verifyPassword($user, $request->get('password')))
+            return response()->json([], 400);
+
+        return response()->json([], 200);
     }
 }

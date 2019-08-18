@@ -43,7 +43,7 @@ class UserService
      * @param string $hash
      * @return bool
      */
-    private function passwordValid(string $password, string $hash): bool
+    public function passwordValid(string $password, string $hash): bool
     {
         return password_verify($password, $hash);
     }
@@ -53,7 +53,7 @@ class UserService
      * @param string $password
      * @return bool
      */
-    private function verifyPassword(User $user, string $password): bool
+    public function verifyPassword(User $user, string $password): bool
     {
         if (empty($user))
             return false;

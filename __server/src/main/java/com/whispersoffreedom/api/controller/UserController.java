@@ -28,8 +28,8 @@ public class UserController {
     public WofSession enterServer(@RequestBody StartSessionRequest request) {
         if (WofServer.isFull())
             throw new ServerFullException();
+        WofServer.enterServer(request.getUsername(), request.getPassword());
         Client client = WofServer.registerClient(request.getUsername());
-        WofServer.enterServer(request.getUsername());
         return new WofSession(client.getId().toString());
     }
 

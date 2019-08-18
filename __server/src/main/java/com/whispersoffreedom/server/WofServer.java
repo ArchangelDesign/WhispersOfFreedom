@@ -131,8 +131,10 @@ public class WofServer {
         command.execute();
     }
 
-    public static void enterServer(String username) {
+    public static void enterServer(String username, String password) {
         logger.info(String.format("User %s is entering the server...", username));
+        // @TODO: verify account
+
     }
 
     public static boolean isFull() {

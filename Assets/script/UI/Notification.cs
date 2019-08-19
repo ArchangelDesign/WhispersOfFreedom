@@ -16,7 +16,9 @@ public class Notification : MonoBehaviour
     // Amount of currently shown notifications
     private int notificationCount = 0;
     // When reached we start removing old ones
-    public int MaxNotificationCount = 5;
+    public int MaxNotificationCount = 6;
+
+    public Color ErrorBackngroundColor = new Color(253, 185, 186, 198);
 
 
     private void Start()
@@ -34,8 +36,10 @@ public class Notification : MonoBehaviour
 
         // add to list of notifications and set position
 
+        MoveNotificationsUp();
+
         newNotification.GetComponent<RectTransform>().anchoredPosition =
-            new Vector3(0f, 40 * notificationCount, 0f);
+            new Vector3(0f, 0, 0f);
         Notifications.Add(newNotification);
         notificationCount = Notifications.Count;
         return newNotification;
@@ -45,8 +49,8 @@ public class Notification : MonoBehaviour
     public void Error(string message)
     {
         GameObject notification = CreateNotification();
-        notification.GetComponentInChildren<Text>().color = Color.red;
-        notification.GetComponentInChildren<Text>().text = message;
+        notification.GetComponentInChildren<Image>().color = ErrorBackngroundColor;
+        notification.GetComponentInChildren<Text>().text = message + notificationCount;
     }
 
     // Show info notification
@@ -63,10 +67,36 @@ public class Notification : MonoBehaviour
             for (int i = Notifications.Count - 1; i >= 0; i--)
             {
                 if (Notifications[i] == null)
-                    Notifications.RemoveAt(i);
+                    removeNotification(i);
             }
         }
 
+    }
+
+    private void removeNotification(int index)
+    {
+        if (Notifications[index] != null)
+            Destroy(Notifications[index]);
+        Notifications.RemoveAt(index);
+        notificationCount = Notifications.Count;
+    }
+
+    private void MoveNotificationsUp()
+    {
+        if (notificationCount == MaxNotificationCount)
+        {
+            removeNotification(0);
+        }
+        for (int i = 0; i < Notifications.Count; i++)
+        {
+            if (Notifications[i] != null)
+                Notifications[i].transform.position = new Vector3(
+                    Notifications[i].transform.position.x,
+                    Notifications[i].transform.position.y + 40, 0
+                    );
+        }
+
+        
     }
 
 }

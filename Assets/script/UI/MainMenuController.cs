@@ -8,6 +8,7 @@ public class MainMenuController : MonoBehaviour
 {
 
     public InputField usernameInput;
+    public InputField passwordInput;
     public GameObject battleListView;
     public Button connectButton;
     private ApiClient apiClient = ApiClient.getInstance();
@@ -41,6 +42,7 @@ public class MainMenuController : MonoBehaviour
             return;
         }
         string username = usernameInput.text.Trim();
+        string password = passwordInput.text.Trim();
         if (username == null || username.Length < 4) {
             NotificationController.Error("Test error notification");            
             return;
@@ -49,7 +51,7 @@ public class MainMenuController : MonoBehaviour
         if (username.Length < 4)
             return;
 
-        apiClient.EnterServer(username);
+        apiClient.EnterServer(username, password);
         connectButton.GetComponentInChildren<Text>().text = "Disconnect";
 
     }

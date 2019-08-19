@@ -72,11 +72,11 @@ public class ApiClient
         return instance;
     }
 
-    public void EnterServer(string username)
+    public void EnterServer(string username, string password)
     {
         if (loggedIn)
             return;
-        EnterServerRequest request = new EnterServerRequest(username);
+        EnterServerRequest request = new EnterServerRequest(username, password);
         lastResponse = null;
 
         string response = SendPostRequest("/user/enter", JsonUtility.ToJson(request));

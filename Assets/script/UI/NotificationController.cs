@@ -4,6 +4,8 @@ using System.Collections;
 
 public class NotificationController : MonoBehaviour
 {
+    public int ttl = 4;
+
 	void Start()
 	{
 		// Start coroutine to fade it out after awhile
@@ -13,7 +15,7 @@ public class NotificationController : MonoBehaviour
 
     private IEnumerator AutoDestroy()
 	{
-		yield return new WaitForSeconds(2);
+		yield return new WaitForSeconds(ttl);
         // TODO: fade out
 		Destroy(gameObject);
 	}

@@ -95,6 +95,9 @@ class UserController extends Controller
      */
     public function verifyCredentials(Request $request, UserService $userService)
     {
+        if (empty($request->get('email')) || empty($request->get('password')))
+            return response()->json([], 400);
+
         $user = $userService->fetchUserByEmail($request->get('email'));
         if (!$user)
             return response()->json([], 400);

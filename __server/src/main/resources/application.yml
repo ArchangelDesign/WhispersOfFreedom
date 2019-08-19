@@ -4,3 +4,5 @@ WofServer:
 
 TcpServer:
   port: 8081
+
+adminApiUrl: http://wof-admin.local/api/

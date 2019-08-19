@@ -44,6 +44,29 @@
     <div class="row">
 
         <div class="col-lg-4">
+            <div class="thumbnail">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/nExLEaLKaTI" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+
+                <div class="caption">
+                    <h4>Wof #10</h4>
+                    <p>
+                        It seems that every time I want to move on to lobby screen there is something on the main menu
+                        screen not letting me do that.
+                        At first, I wanted a simple notification in the corner of the screen, plain text, fade in and
+                        out, however, once I looked at that I came t the conclusion that it just plain didn't work, not
+                        only it was bearly visible but there was an issue when multiple notifications were displayed.
+                        Since it is the only way to notify the user of any errors I had to fix that before moving on
+                        with anything.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
 
             <div class="thumbnail">
                 <div class="embed-responsive embed-responsive-16by9">
@@ -84,22 +107,7 @@
             </div>
         </div>
 
-        <div class="col-lg-4">
-            <div class="thumbnail">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/SesLqs4Jo9A" frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                </div>
 
-                <div class="caption">
-                    <h4>Wof #7</h4>
-                    <p>
-                        Working on battle list in the lobby and implementing fixes to TCP/IP server.
-                    </p>
-                </div>
-            </div>
-        </div>
 
     </div>
 </div>
@@ -114,7 +122,8 @@
             </div>
             <div class="modal-body">
                 <p id="validation-error-message">Thank you for your interest. Your subscription has been confirmed.
-                From time to time we will send you an update on progress and eventually an invitation to beta testing.</p>
+                    From time to time we will send you an update on progress and eventually an invitation to beta
+                    testing.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>

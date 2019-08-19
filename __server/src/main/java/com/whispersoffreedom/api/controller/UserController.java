@@ -4,6 +4,7 @@ import com.whispersoffreedom.api.dto.*;
 import com.whispersoffreedom.server.Battle;
 import com.whispersoffreedom.server.Client;
 import com.whispersoffreedom.server.WofServer;
+import com.whispersoffreedom.server.exception.InvalidCredentialsException;
 import com.whispersoffreedom.server.exception.ServerFullException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,12 @@ public class UserController {
     }
 
     @PostMapping("/enter")
-    public WofSession enterServer(@RequestBody StartSessionRequest request) {
+    public WofSession enterServer(@RequestBody StartSessionRequest request)
+            throws InvalidCredentialsException {
         if (WofServer.isFull())
             throw new ServerFullException();
-        WofServer.enterServer(request.getUsername(), request.getPassword());
+        if (!WofServer.enterServer(request.getUsername(), request.getPassword()))
+            throw new InvalidCredentialsException();
         Client client = WofServer.registerClient(request.getUsername());
         return new WofSession(client.getId().toString());
     }

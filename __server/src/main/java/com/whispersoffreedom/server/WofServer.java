@@ -7,13 +7,17 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+@Service
 public class WofServer {
 
     @Getter
@@ -29,6 +33,11 @@ public class WofServer {
 
     private static UdpServer udpServer;
 
+    @Autowired
+    private AdminService adminServiceAutowire;
+
+    private static AdminService adminService;
+
     /**
      * Maximum number of connected clients allowed
      */
@@ -39,6 +48,11 @@ public class WofServer {
      * if no TCP connection has been established
      */
     private static final int MAX_ZOMBIE_TIME = 30;
+
+    @PostConstruct
+    private void autowiredInit() {
+        adminService = this.adminServiceAutowire;
+    }
 
     public static void initializeServer() throws IOException {
         if (initialized)
@@ -131,10 +145,16 @@ public class WofServer {
         command.execute();
     }
 
-    public static void enterServer(String username, String password) {
+    /**
+     * Connects to Admin API to verify credentials
+     *
+     * @param username email
+     * @param password password
+     * @return true if credentials are correct
+     */
+    public static boolean enterServer(String username, String password) {
         logger.info(String.format("User %s is entering the server...", username));
-        // @TODO: verify account
-
+        return adminService.verifyCredentials(username, password);
     }
 
     public static boolean isFull() {

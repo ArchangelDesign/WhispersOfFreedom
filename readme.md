@@ -23,15 +23,14 @@ Online tactical game allowing players to face each other on the streets of 1944 
 
 Almost every step of development process is documented as a video
 
-[playlist](https://www.youtube.com/playlist?list=PLbaAAg7kQaeGxsT3mtIoBC3eHiZrf86BW)
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/nExLEaLKaTI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[Full playlist](https://www.youtube.com/playlist?list=PLbaAAg7kQaeGxsT3mtIoBC3eHiZrf86BW)
 
 ### Technology
 
 - Java Spring Boot 2
 - Unity 3D
 - C#
+- PHP (Laravel)
 - REST
 - TCP/IP
 - UDP

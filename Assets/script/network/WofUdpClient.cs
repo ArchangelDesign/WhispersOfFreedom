@@ -49,8 +49,8 @@ public class WofUdpClient
             return;
         }
         Debug.Log("Starting UDP client");
-        endpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8082);
-        client = new UdpClient("127.0.0.1", 8082);
+        endpoint = new IPEndPoint(IPAddress.Parse(GlobalConfig.BATTLE_SERVER_ADDRESS), GlobalConfig.BATTLE_SERVER_UDP_PORT);
+        client = new UdpClient(GlobalConfig.BATTLE_SERVER_ADDRESS, GlobalConfig.BATTLE_SERVER_UDP_PORT);
         client.Connect(endpoint);
         connected = true;
         serverAlive = true;

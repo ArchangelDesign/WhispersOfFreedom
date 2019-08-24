@@ -19,6 +19,7 @@ public class Notification : MonoBehaviour
     public int MaxNotificationCount = 6;
 
     public Color ErrorBackngroundColor = new Color(253, 185, 186, 198);
+    public Color InfoBackngroundColor = new Color(60, 200, 120, 198);
 
 
     private void Start()
@@ -50,7 +51,7 @@ public class Notification : MonoBehaviour
     {
         GameObject notification = CreateNotification();
         notification.GetComponentInChildren<Image>().color = ErrorBackngroundColor;
-        notification.GetComponentInChildren<Text>().text = message + notificationCount;
+        notification.GetComponentInChildren<Text>().text = message;
     }
 
     // Show info notification

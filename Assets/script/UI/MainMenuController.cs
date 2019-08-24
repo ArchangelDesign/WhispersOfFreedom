@@ -44,15 +44,19 @@ public class MainMenuController : MonoBehaviour
         string username = usernameInput.text.Trim();
         string password = passwordInput.text.Trim();
         if (username == null || username.Length < 4) {
-            NotificationController.Error("Test error notification");            
+            NotificationController.Error("Invalid username");            
             return;
         }
 
-        if (username.Length < 4)
-            return;
+        if (apiClient.EnterServer(username, password))
+        {
+            connectButton.GetComponentInChildren<Text>().text = "Disconnect";
 
-        apiClient.EnterServer(username, password);
-        connectButton.GetComponentInChildren<Text>().text = "Disconnect";
+        } else
+        {
+            NotificationController.Error(apiClient.GetLastError());
+        }
+        
 
     }
 }

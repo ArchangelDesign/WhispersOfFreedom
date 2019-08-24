@@ -20,11 +20,11 @@ public class ApiClient
 
     private ServerState serverState = ServerState.READY;
 
-    private string URL = "http://localhost:8080";
+    private string URL = GlobalConfig.API_URL;
 
-    private string TcpServerUrl = "localhost";
+    private string TcpServerUrl = GlobalConfig.BATTLE_SERVER_ADDRESS;
 
-    private int TcpServerPort = 8081;
+    private int TcpServerPort = GlobalConfig.BATTLE_SERVER_PORT;
 
     private string sessionToken = null;
 
@@ -72,10 +72,10 @@ public class ApiClient
         return instance;
     }
 
-    public void EnterServer(string username, string password)
+    public bool EnterServer(string username, string password)
     {
         if (loggedIn)
-            return;
+            return false;
         EnterServerRequest request = new EnterServerRequest(username, password);
         lastResponse = null;
 
@@ -84,7 +84,13 @@ public class ApiClient
         if (genericResponse == null)
         {
             Debug.LogError("Cannot connect to server.");
-            return;
+            lastError = "Cannot connect to server. Invalid response.";
+            return false;
+        }
+        if (genericResponse.sessionToken == null)
+        {
+            lastError = "Cannot connect to server. No session token received.";
+            return false;
         }
         if (genericResponse.sessionToken != null)
         {
@@ -93,7 +99,11 @@ public class ApiClient
             loggedIn = true;
             InitiateTcpConnection();
             InitiateUdpConnection();
+            return true;
         }
+
+        lastError = "Unexpected outcome.";
+        return false;
     }
 
     public void LeaveServer()
@@ -394,5 +404,10 @@ public class ApiClient
         if (tcpClient != null)
             tcpClient.Dispose();
         //receiveThread.Abort();
+    }
+
+    public string GetLastError()
+    {
+        return lastError;
     }
 }

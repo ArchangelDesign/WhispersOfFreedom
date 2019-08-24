@@ -73,6 +73,7 @@
     <Compile Include="Assets\script\entity\weapon\german\MG42.cs" />
     <Compile Include="Assets\script\entity\weapon\german\MP40.cs" />
     <Compile Include="Assets\script\GameController.cs" />
+    <Compile Include="Assets\script\GlobalConfig.cs" />
     <Compile Include="Assets\script\network\ApiClient.cs" />
     <Compile Include="Assets\script\network\Entity\Battle.cs" />
     <Compile Include="Assets\script\network\Entity\Enums\ServerState.cs" />

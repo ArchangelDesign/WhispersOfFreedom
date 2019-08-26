@@ -4,15 +4,12 @@ addons:
   apt:
     packages:
       - ant
-      
+
 jdk:
   - oraclejdk8
   - oraclejdk9
   - openjdk8
 
-jobs:
-  include:
-    - stage: Server
-    script:
-      - jdk_switcher use oraclejdk8
-      - cd $TRAVIS_BUILD_DIR/__server && ./gradlew bootJar
+script:
+  - jdk_switcher use oraclejdk8
+  - cd $TRAVIS_BUILD_DIR/__server && ./gradlew bootJar

@@ -1,4 +1,10 @@
-```
+# Whispers of Freedom
+
+## Operation Tempest
+
+![Build Status](https://travis-ci.com/ArchangelDesign/WhispersOfFreedom.svg?branch=master)
+
+```(bash)
 *  __      __          ___________ *
 * /  \    /  \ _______ \_   _____/ *
 * \   \/\/   //       \ |    __)   *
@@ -8,10 +14,6 @@
 * Whispers of Freedom              *
 ====================================
 ```
-
-## Whispers of Freedom
-
-### Poland is still fighting
 
 [https://whispers-of-freedom.com](https://whispers-of-freedom.com)
 

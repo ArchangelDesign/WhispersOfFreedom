@@ -103,7 +103,7 @@ class UserController extends Controller
             return response()->json([], 400);
 
         if (!$userService->verifyPassword($user, $request->get('password')))
-            return response()->json([], 400);
+            return response()->json(["error"=> "Invalid credentials."], 400);
 
         return response()->json([], 200);
     }

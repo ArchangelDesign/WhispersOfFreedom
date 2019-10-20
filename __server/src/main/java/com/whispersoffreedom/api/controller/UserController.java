@@ -6,6 +6,7 @@ import com.whispersoffreedom.server.Client;
 import com.whispersoffreedom.server.WofServer;
 import com.whispersoffreedom.server.exception.InvalidCredentialsException;
 import com.whispersoffreedom.server.exception.ServerFullException;
+import com.whispersoffreedom.server.exception.UserAlreadyConnectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -27,9 +28,11 @@ public class UserController {
 
     @PostMapping("/enter")
     public WofSession enterServer(@RequestBody StartSessionRequest request)
-            throws InvalidCredentialsException {
+            throws InvalidCredentialsException, UserAlreadyConnectedException {
         if (WofServer.isFull())
             throw new ServerFullException();
+        if (WofServer.getClientByUsername(request.getUsername()) != null)
+            throw new UserAlreadyConnectedException();
         if (!WofServer.enterServer(request.getUsername(), request.getPassword()))
             throw new InvalidCredentialsException();
         Client client = WofServer.registerClient(request.getUsername());
@@ -82,5 +85,4 @@ public class UserController {
     ) {
         WofServer.leaveServer(sessionToken);
     }
-
 }

@@ -169,6 +169,15 @@ public class WofServer {
         return clients.size();
     }
 
+    public static List<Client> getAllClients() {
+        ArrayList<Client> result = new ArrayList<>();
+        for (Map.Entry<String, Client> entry : clients.entrySet()) {
+            result.add(entry.getValue());
+        }
+
+        return result;
+    }
+
     public static void dropClientByConnectionId(UUID connectionId) {
         String clientId = getClientIdByConnectionId(connectionId);
         dropClientById(clientId);
@@ -201,6 +210,21 @@ public class WofServer {
                 if (entry.getValue().getConnection().getConnectionId() == connectionId)
                     return entry.getKey();
         throw new ClientNotFoundException();
+    }
+
+    /**
+     * Iterates through connected clients
+     *
+     * @param username user identifier
+     * @return found client or null
+     */
+    public static Client getClientByUsername(String username) {
+        for (Map.Entry<String, Client> entry : clients.entrySet()) {
+            if (entry.getValue().getUsername().equalsIgnoreCase(username))
+                return entry.getValue();
+        }
+
+        return null;
     }
 
     /**
@@ -271,7 +295,7 @@ public class WofServer {
 
     public static void leaveServer(String sessionToken) {
         logger.info(String.format("Client %s is disconnecting...", sessionToken));
-        clients.get(sessionToken).destroy();
+        getClient(sessionToken).destroy();
         dropClientById(sessionToken);
     }
 }

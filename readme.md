@@ -17,6 +17,8 @@
 
 [https://whispers-of-freedom.com](https://whispers-of-freedom.com)
 
+Trello board: https://trello.com/b/umU4JxFI/whispers-of-freedom
+
 Online tactical game allowing players to face each other on the streets of 1944 Warsaw.
 
 ![alt text](https://github.com/ArchangelDesign/WhispersOfFreedom/blob/master/__admin/public/img/Warsaw_Uprising_-_Baon_Czata_with_PIAT_guns.jpg)

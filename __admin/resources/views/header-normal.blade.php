@@ -50,12 +50,15 @@
                     <a href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li>
-                    <a href="https://github.com/ArchangelDesign/WhispersOfFreedom">GitHub repository</a>
+                    <a href="https://github.com/ArchangelDesign/WhispersOfFreedom">
+                        <img style="height: 25px" src="/img/github-icon.svg">&nbsp;&nbsp;GitHub repository</a>
                 </li>
-                <li><a href="https://www.youtube.com/playlist?list=PLbaAAg7kQaeGxsT3mtIoBC3eHiZrf86BW">YouTube live
+                <li><a href="https://www.youtube.com/playlist?list=PLbaAAg7kQaeGxsT3mtIoBC3eHiZrf86BW">
+                        <img style="height: 25px" src="/img/youtube_64dp.png">&nbsp;&nbsp;YouTube live
                         development</a>
                 </li>
-                <li><a href="https://trello.com/b/umU4JxFI/whispers-of-freedom">Trello Board</a></li>
+                <li><a href="https://trello.com/b/umU4JxFI/whispers-of-freedom">
+                        <img style="height: 25px" src="/img/trello-icon.png">&nbsp;&nbsp;Trello Board</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

@@ -17,6 +17,7 @@ public class AdminController {
     public List<Client> getClientList(
             @RequestHeader(name = "session-token") String sessionToken
     ) {
+        // @TODO: requires admin account
         if (WofServer.getClientCount() == 0)
             return null;
 

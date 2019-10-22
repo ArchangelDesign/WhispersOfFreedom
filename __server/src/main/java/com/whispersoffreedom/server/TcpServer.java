@@ -12,6 +12,7 @@ import java.io.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.UUID;
 
 public class TcpServer {
@@ -27,7 +28,7 @@ public class TcpServer {
 
     private Logger logger = LoggerFactory.getLogger(TcpServer.class);
 
-    private HashMap<UUID, TcpConnection> connections = new HashMap<>();
+    private Hashtable<UUID, TcpConnection> connections = new Hashtable<>();
 
     public TcpServer() {
         logger.info("Starting TCP server...");
@@ -114,6 +115,12 @@ public class TcpServer {
                     logger.info(String.format("Dropping %s due to timeout.", uuid));
                     dropConnection(uuid);
                     return;
+                }
+                if (tcpConnection.getClient() == null) {
+                    // Issue: TCP connection keeps sending packets after the client is no longer
+                    // on the list. Drop the connection as soon as getClient() returns null
+                    logger.info(String.format("Dropping connection %s since client has been dropped.", uuid));
+                    dropConnection(uuid);
                 }
                 tcpConnection.sendPacket(new PingPacket());
             });

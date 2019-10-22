@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class MainMenuController : MonoBehaviour
     public InputField passwordInput;
     public GameObject battleListView;
     public Button connectButton;
+    public Button createLobbyButton;
     private ApiClient apiClient = ApiClient.getInstance();
     private GameController gameController;
     private Notification NotificationController;
@@ -25,6 +27,7 @@ public class MainMenuController : MonoBehaviour
         if (gameController == null)
             throw new Exception("Game Controller not found in the scene.");
         connectButton.onClick.AddListener(OnConnectClicked);
+        createLobbyButton.onClick.AddListener(OnCreateLobbyClicked);
     }
 
     // Update is called once per frame
@@ -52,11 +55,15 @@ public class MainMenuController : MonoBehaviour
         {
             connectButton.GetComponentInChildren<Text>().text = "Disconnect";
 
-        } else
+        }
+        else
         {
             NotificationController.Error(apiClient.GetLastError());
         }
-        
+    }
 
+    public void OnCreateLobbyClicked()
+    {
+        SceneManager.LoadScene("BattleLobby");
     }
 }

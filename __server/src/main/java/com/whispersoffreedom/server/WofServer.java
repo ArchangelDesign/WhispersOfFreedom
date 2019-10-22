@@ -23,9 +23,9 @@ public class WofServer {
     @Getter
     private static boolean initialized = false;
 
-    private static HashMap<String, Battle> battles = new HashMap<>();
+    private static Hashtable<String, Battle> battles = new Hashtable<>();
 
-    private static HashMap<String, Client> clients = new HashMap<>();
+    private static Hashtable<String, Client> clients = new Hashtable<>();
 
     private static Logger logger = LoggerFactory.getLogger(WofServer.class);
 

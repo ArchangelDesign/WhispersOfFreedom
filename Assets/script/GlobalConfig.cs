@@ -5,8 +5,8 @@ public class GlobalConfig
     {
     }
 
-    public const string BATTLE_SERVER_ADDRESS = "localhost";
-    public const string API_URL = "http://localhost:8080";
+    public const string BATTLE_SERVER_ADDRESS = "206.189.185.162";
+    public const string API_URL = "http://api.whispers-of-freedom.com:8080";
     public const int BATTLE_SERVER_PORT = 8081;
     public const int BATTLE_SERVER_UDP_PORT = 8082;
 }

@@ -55,6 +55,7 @@
                 <li><a href="https://www.youtube.com/playlist?list=PLbaAAg7kQaeGxsT3mtIoBC3eHiZrf86BW">YouTube live
                         development</a>
                 </li>
+                <li><a href="https://trello.com/b/umU4JxFI/whispers-of-freedom">Trello Board</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">

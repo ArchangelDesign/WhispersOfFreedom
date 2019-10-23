@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
@@ -138,10 +139,16 @@ public class ApiClient
         Debug.Log("initializing TCP connection.");
         try
         {
+            tcpClient = new TcpClient(TcpServerUrl, TcpServerPort);
             receiveThread = new Thread(new ThreadStart(TcpDataHandler));
             receiveThread.IsBackground = true;
             receiveThread.Start();
+            tcpConnected = true;
             Debug.Log("TCP thread started.");
+            // now we need to associate TCP connection with session
+            Thread.Sleep(200);
+            IdentificationCommand cmd = new IdentificationCommand(sessionToken);
+            TcpSendData(JsonUtility.ToJson(cmd));
         } catch (Exception e)
         {
             Debug.LogError("TCP ERROR: " + e.Message);
@@ -357,7 +364,6 @@ public class ApiClient
 
     private void TcpDataHandler()
     {
-        tcpClient = new TcpClient(TcpServerUrl, TcpServerPort);
         Byte[] buffer = new byte[1024];
         tcpConnected = true;
 
@@ -379,7 +385,10 @@ public class ApiClient
     private void TcpSendData(string data)
     {
         if (!tcpConnected)
+        {
+            Debug.LogError("Trying to send TCP packet when client is not connected.");
             return;
+        }
 
         NetworkStream stream = tcpClient.GetStream();
 
@@ -389,8 +398,10 @@ public class ApiClient
             return;
         }
 
+        StreamWriter writer = new StreamWriter(stream);
         byte[] rawData = Encoding.Encode(data);
-        stream.Write(rawData, 0, rawData.Length);
+        writer.WriteLine(data);
+        writer.Flush();
     }
 
     private void OnError(string error)

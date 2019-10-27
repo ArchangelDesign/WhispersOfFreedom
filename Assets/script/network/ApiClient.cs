@@ -324,10 +324,15 @@ public class ApiClient
         {
             case "ping":
                 lastPing = DateTime.Now.Ticks;
+                SendPongCommand();
                 break;
 
             case "ack":
                 Debug.Log("ACK");
+                break;
+
+            case "welcome":
+                Notification.getInstance().InfoAsync("Connected to server.");
                 break;
 
             default:
@@ -407,6 +412,11 @@ public class ApiClient
     private void OnError(string error)
     {
         Debug.LogError(error);
+    }
+
+    private void SendPongCommand()
+    {
+        TcpSendData(new PongCommand(sessionToken).ToJson());
     }
 
     public void OnDestroy()

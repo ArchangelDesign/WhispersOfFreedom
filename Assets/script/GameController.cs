@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour
     private ApiClient apiClient = ApiClient.getInstance();
     private WofUdpClient udpClient = WofUdpClient.GetInstance();
 
+    public GameObject MainMenuCanvas;
+
     void Start()
     {
         
@@ -22,9 +24,18 @@ public class GameController : MonoBehaviour
 
     private void OnDestroy()
     {
-        //apiClient.OnDestroy();
-        //udpClient.OnDestroy();
+        apiClient.OnDestroy();
+        udpClient.OnDestroy();
     }
 
+    public void HideMainMenu()
+    {
+        MainMenuCanvas.SetActive(false);
+    }
+
+    public void ShowMainMenu()
+    {
+        MainMenuCanvas.SetActive(true);
+    }
 
 }

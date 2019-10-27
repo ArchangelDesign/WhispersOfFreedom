@@ -64,6 +64,12 @@ public class MainMenuController : MonoBehaviour
 
     public void OnCreateLobbyClicked()
     {
-        SceneManager.LoadScene("BattleLobby");
+        if (!apiClient.IsLoggedIn())
+        {
+            NotificationController.Error("Not connected.");
+            return;
+        }
+        gameController.HideMainMenu();
+        SceneManager.LoadScene("BattleLobby", LoadSceneMode.Additive);
     }
 }

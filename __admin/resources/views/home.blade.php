@@ -46,6 +46,28 @@
         <div class="col-lg-4">
             <div class="thumbnail">
                 <div class="embed-responsive embed-responsive-16by9">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/j8pdJHeojP4" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+
+                <div class="caption">
+                    <h4>Wof #11</h4>
+                    <p>
+                        Finally, I have released a public server hosted on DigitalOcean, that will allow us to conduct
+                        the first concurrency test. For that reason, I've replaced HashMaps with Hashtables and
+                        meanwhile discovered a bug with TCP handshake, now the client properly establishes TCP
+                        connection after starting a session and only one session is allowed from each client account.
+                        Hopefully, the next step will be releasing a lobby screen with chat functionality so we can
+                        actually test this architecture which is already showing many fundamental problems with it.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="thumbnail">
+                <div class="embed-responsive embed-responsive-16by9">
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/nExLEaLKaTI" frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen></iframe>
@@ -86,28 +108,6 @@
 
             </div>
         </div>
-
-
-        <div class="col-lg-4">
-            <div class="thumbnail">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/lAWZ3nFe5Io" frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                </div>
-
-                <div class="caption">
-                    <h4>Wof #8</h4>
-                    <p>
-                        First major functionality is starting to come together. Some new problems have occurred but
-                        nothing seriously holding me back. If everything goes well, in the next video I will finish
-                        Lobby on the client side, listing connected clients and allowing to exit lobby and start combat.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-
 
     </div>
 </div>

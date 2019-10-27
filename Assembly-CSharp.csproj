@@ -80,6 +80,7 @@
     <Compile Include="Assets\script\network\Entity\Request\EnterBattleRequest.cs" />
     <Compile Include="Assets\script\network\Entity\Request\EnterServerRequest.cs" />
     <Compile Include="Assets\script\network\Entity\Request\IdentificationCommand.cs" />
+    <Compile Include="Assets\script\network\Entity\Request\PongCommand.cs" />
     <Compile Include="Assets\script\network\Entity\Response\GenericResponse.cs" />
     <Compile Include="Assets\script\network\Entity\WofCommand.cs" />
     <Compile Include="Assets\script\network\Utils\Encoding.cs" />

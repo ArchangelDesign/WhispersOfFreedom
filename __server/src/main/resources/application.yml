@@ -6,3 +6,7 @@ TcpServer:
   port: 8081
 
 adminApiUrl: https://whispers-of-freedom.com/api/
+
+logging:
+  file: wof-server.log
+  path: /var/log/

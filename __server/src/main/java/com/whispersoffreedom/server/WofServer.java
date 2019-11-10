@@ -141,8 +141,12 @@ public class WofServer {
     }
 
     public static void clientDataReceived(TcpConnection connection, WofPacket packet) {
-        WofCommand command = WofCommand.build(connection, packet);
-        command.execute();
+        try {
+            WofCommand command = WofCommand.build(connection, packet);
+            command.execute();
+        } catch (InvalidCommandReceived ex) {
+            logger.error(String.format("Unhandled command %s received.", packet.getCommand()));
+        }
     }
 
     /**

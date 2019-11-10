@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
@@ -43,6 +44,8 @@ public class ApiClient
 
     private bool tcpConnected = false;
 
+    private bool isConnecting = false;
+
     private bool inBattle = false;
 
     private string currentBattleId;
@@ -65,6 +68,8 @@ public class ApiClient
 
     private ServerStats serverStats = new ServerStats();
 
+    public delegate void EnterServerCallback(bool success);
+
     public static ApiClient getInstance()
     {
         if (instance == null)
@@ -73,24 +78,47 @@ public class ApiClient
         return instance;
     }
 
-    public bool EnterServer(string username, string password)
+    public void EnterServerAsync(string username, string password, EnterServerCallback callback)
+    {
+        Thread t = new Thread(() => EnterServer(username, password, callback));
+        t.Start();
+    }
+
+    public bool EnterServer(string username, string password, EnterServerCallback callback)
     {
         if (loggedIn)
+        {
+            if (callback != null)
+                callback(false);
             return false;
+        }
         EnterServerRequest request = new EnterServerRequest(username, password);
         lastResponse = null;
-
-        string response = SendPostRequest("/user/enter", JsonUtility.ToJson(request));
+        string response;
+        try
+        {
+           response = SendPostRequest("/user/enter", JsonUtility.ToJson(request));
+        } catch(Exception se)
+        {
+            if (callback != null)
+                callback(false);
+            Debug.Log("Socket exception: " + se.Message);
+            return false;
+        }
         GenericResponse genericResponse = JsonUtility.FromJson<GenericResponse>(response);
         if (genericResponse == null)
         {
             Debug.LogError("Cannot connect to server.");
             lastError = "Cannot connect to server. Invalid response.";
+            if (callback != null)
+                callback(false);
             return false;
         }
         if (genericResponse.sessionToken == null)
         {
             lastError = "Cannot connect to server. No session token received.";
+            if (callback != null)
+                callback(false);
             return false;
         }
         if (genericResponse.sessionToken != null)
@@ -100,10 +128,14 @@ public class ApiClient
             loggedIn = true;
             InitiateTcpConnection();
             InitiateUdpConnection();
+            if (callback != null)
+                callback(false);
             return true;
         }
 
         lastError = "Unexpected outcome.";
+        if (callback != null)
+            callback(false);
         return false;
     }
 
@@ -136,19 +168,18 @@ public class ApiClient
 
     private void InitiateTcpConnection()
     {
+        if (isConnecting)
+        {
+            Debug.Log("Connection attempt in progress...");
+            return;
+        }
         Debug.Log("initializing TCP connection.");
         try
         {
-            tcpClient = new TcpClient(TcpServerUrl, TcpServerPort);
             receiveThread = new Thread(new ThreadStart(TcpDataHandler));
             receiveThread.IsBackground = true;
             receiveThread.Start();
-            tcpConnected = true;
             Debug.Log("TCP thread started.");
-            // now we need to associate TCP connection with session
-            Thread.Sleep(200);
-            IdentificationCommand cmd = new IdentificationCommand(sessionToken);
-            TcpSendData(JsonUtility.ToJson(cmd));
         } catch (Exception e)
         {
             Debug.LogError("TCP ERROR: " + e.Message);
@@ -238,72 +269,37 @@ public class ApiClient
 
     string SendRequest(string uri, string method, string body)
     {
-        // We are blocking main thread waiting for response from the server
-        // that way everything seems easy, no more waiting and blocking
-        // @TODO: blocking main thread makes it impossible to implement 
-        // progress bars, loaders etc.
-
-        // @TODO: DRY
+        HttpClient httpClient = new HttpClient();
         Debug.Log("[" + method + "] " + uri);
         serverState = ServerState.TX;
-        byte[] rawBody = System.Text.Encoding.ASCII.GetBytes(body);
-        DownloadHandlerBuffer downloadHandler = new DownloadHandlerBuffer();
 
-        UploadHandlerRaw uploadHandler = new UploadHandlerRaw(rawBody);
-        uploadHandler.contentType = "application/json";
-        UnityWebRequest request = new UnityWebRequest(uri, method, downloadHandler, uploadHandler);
+        httpClient.BaseAddress = new Uri(URL);
         if (sessionToken != null)
-            request.SetRequestHeader("session-token", sessionToken);
-        request.SendWebRequest();
-        WaitForSeconds w;
-        while (!request.isDone)
-            w = new WaitForSeconds(0.1f);
-        Debug.Log("TX: " + request.uploadedBytes + " | RX" + request.downloadedBytes);
-        lastTx = request.uploadedBytes;
-        lastRx = request.downloadedBytes;
-        totalTx += request.uploadedBytes;
-        totalRx += request.downloadedBytes;
-        lastResponseCode = request.responseCode;
-        if (!request.isDone)
-            Debug.LogError("NOT DONE");
-        if (request.isHttpError)
-        {
-            lastError = request.error;
-            OnError(request.error);
-        }
+            httpClient.DefaultRequestHeaders.Add("session-token", sessionToken);
+        httpClient.DefaultRequestHeaders.Accept.Add(
+            new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        HttpContent content = new StringContent(body);
+        httpClient.Timeout = new TimeSpan(0, 0, 6);
+
+        HttpResponseMessage response = httpClient.PostAsync(uri, content).Result;
+
+       
+        lastTx = (ulong)body.Length;
+        lastRx = (ulong)response.Content.ReadAsByteArrayAsync().Result.Length;
+        totalTx += lastTx;
+        totalRx += lastRx;
+        // @TODO
+        lastResponseCode = response.IsSuccessStatusCode ? 200 : 500;
+        
         serverState = ServerState.RX;
-        OnDataReceived(BytesToString(request.downloadHandler.data));
+        lastResponse = response.Content.ReadAsStringAsync().Result;
         serverState = ServerState.READY;
-        return BytesToString(request.downloadHandler.data);
+        return lastResponse;
     }
 
     string SendRequest(string uri, string method)
     {
-        // @TODO: DRY
-        serverState = ServerState.TX;
-        Debug.Log("[" + method + "] " + uri);
-        UnityWebRequest request = UnityWebRequest.Get(uri);
-        request.SendWebRequest();
-        WaitForSeconds w;
-        while (!request.isDone)
-            w = new WaitForSeconds(0.1f);
-
-        serverState = ServerState.RX;
-        Debug.Log("TX: " + request.uploadedBytes + " | RX" + request.downloadedBytes);
-        lastTx = request.uploadedBytes;
-        lastRx = request.downloadedBytes;
-        totalTx += request.uploadedBytes;
-        totalRx += request.downloadedBytes;
-        lastResponseCode = request.responseCode;
-        if (request.isHttpError)
-        {
-            lastError = request.error;
-            OnError(request.error);
-        }
-
-        OnDataReceived(BytesToString(request.downloadHandler.data));
-        serverState = ServerState.READY;
-        return BytesToString(request.downloadHandler.data);
+        return SendRequest(uri, method, "");
     }
 
     private string BytesToString(byte[] bytes)
@@ -369,8 +365,19 @@ public class ApiClient
 
     private void TcpDataHandler()
     {
+        isConnecting = true;
+        Notification.getInstance().InfoAsync("Connecting to server...");
+        tcpClient = new TcpClient(TcpServerUrl, TcpServerPort);
+        Debug.Log("Created TCPClient object.");
+        tcpConnected = true;
+        isConnecting = false;
         Byte[] buffer = new byte[1024];
         tcpConnected = true;
+
+        // now we need to associate TCP connection with session
+        Thread.Sleep(200);
+        IdentificationCommand cmd = new IdentificationCommand(sessionToken);
+        TcpSendData(JsonUtility.ToJson(cmd));
 
         while (tcpClient.Connected)
         {

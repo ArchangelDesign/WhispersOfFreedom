@@ -51,15 +51,16 @@ public class MainMenuController : MonoBehaviour
             return;
         }
 
-        if (apiClient.EnterServer(username, password))
-        {
-            connectButton.GetComponentInChildren<Text>().text = "Disconnect";
+        apiClient.EnterServerAsync(username, password, OnEnterServer);
+    
+    }
 
-        }
+    public void OnEnterServer(bool success)
+    {
+        if (success)
+            connectButton.GetComponentInChildren<Text>().text = "Disconnect";
         else
-        {
-            NotificationController.Error(apiClient.GetLastError());
-        }
+            Notification.getInstance().ErrorAsync("Could not connect to the server.");
     }
 
     public void OnCreateLobbyClicked()

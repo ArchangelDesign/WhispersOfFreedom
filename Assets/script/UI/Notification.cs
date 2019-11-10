@@ -19,6 +19,7 @@ public class Notification : MonoBehaviour
     public int MaxNotificationCount = 6;
 
     private List<string> asyncInfoNotificationsAwaiting = new List<string>();
+    private List<string> asyncErrorNotificationsAwaiting = new List<string>();
 
     public Color ErrorBackngroundColor = new Color(253, 185, 186, 198);
     public Color InfoBackngroundColor = new Color(60, 200, 120, 198);
@@ -45,6 +46,7 @@ public class Notification : MonoBehaviour
     {
         StartCoroutine("RemoveNotifications");
         StartCoroutine("DisplayAsyncNotifications");
+        StartCoroutine("DisplayAsyncErrorNotifications");
     }
 
     private GameObject CreateNotification()
@@ -87,6 +89,11 @@ public class Notification : MonoBehaviour
         asyncInfoNotificationsAwaiting.Add(message);
     }
 
+    public void ErrorAsync(string message)
+    {
+        asyncErrorNotificationsAwaiting.Add(message);
+    }
+
     private IEnumerator RemoveNotifications()
     {
        while (true)
@@ -109,6 +116,19 @@ public class Notification : MonoBehaviour
             {
                 Info(asyncInfoNotificationsAwaiting[0]);
                 asyncInfoNotificationsAwaiting.RemoveAt(0);
+            }
+        }
+    }
+
+    private IEnumerator DisplayAsyncErrorNotifications()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1);
+            if (asyncErrorNotificationsAwaiting.Count > 0)
+            {
+                Error(asyncErrorNotificationsAwaiting[0]);
+                asyncErrorNotificationsAwaiting.RemoveAt(0);
             }
         }
     }

@@ -8,5 +8,4 @@ TcpServer:
 adminApiUrl: https://whispers-of-freedom.com/api/
 
 logging:
-  file: wof-server.log
-  path: /var/log/
+  file: /var/log/wof-server.log

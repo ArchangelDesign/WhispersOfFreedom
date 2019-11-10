@@ -86,6 +86,7 @@ public class ApiClient
 
     public bool EnterServer(string username, string password, EnterServerCallback callback)
     {
+        Debug.Log("Entering server...");
         if (loggedIn)
         {
             if (callback != null)
@@ -129,7 +130,7 @@ public class ApiClient
             InitiateTcpConnection();
             InitiateUdpConnection();
             if (callback != null)
-                callback(false);
+                callback(true);
             return true;
         }
 
@@ -258,30 +259,36 @@ public class ApiClient
 
     private string SendPostRequest(string uri, string body)
     {
-        return SendRequest(URL + uri, "POST", body);
+        return SendRequest(uri, HttpMethod.Post, body);
             
     }
 
     private string SendGetRequest(string uri)
     {
-        return SendRequest(URL + uri, "GET");
+        return SendRequest(uri, HttpMethod.Get, "");
     }
 
-    string SendRequest(string uri, string method, string body)
+    string SendRequest(string uri, HttpMethod method, string body)
     {
         HttpClient httpClient = new HttpClient();
         Debug.Log("[" + method + "] " + uri);
         serverState = ServerState.TX;
 
         httpClient.BaseAddress = new Uri(URL);
-        if (sessionToken != null)
-            httpClient.DefaultRequestHeaders.Add("session-token", sessionToken);
+        httpClient.Timeout = new TimeSpan(0, 0, 6);
         httpClient.DefaultRequestHeaders.Accept.Add(
             new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-        HttpContent content = new StringContent(body);
-        httpClient.Timeout = new TimeSpan(0, 0, 6);
+        if (sessionToken != null)
+            httpClient.DefaultRequestHeaders.Add("session-token", sessionToken);
 
-        HttpResponseMessage response = httpClient.PostAsync(uri, content).Result;
+        HttpRequestMessage request = new HttpRequestMessage(method, uri);
+        if (method != HttpMethod.Get)
+            request.Content = new StringContent(body, System.Text.Encoding.UTF8, "application/json");
+        if (sessionToken != null && method != HttpMethod.Get)
+            request.Content.Headers.Add("session-token", sessionToken);
+
+
+        HttpResponseMessage response = httpClient.SendAsync(request).Result;
 
        
         lastTx = (ulong)body.Length;
@@ -290,6 +297,9 @@ public class ApiClient
         totalRx += lastRx;
         // @TODO
         lastResponseCode = response.IsSuccessStatusCode ? 200 : 500;
+
+        if (!response.IsSuccessStatusCode)
+            Debug.LogError("Client or server error.");
         
         serverState = ServerState.RX;
         lastResponse = response.Content.ReadAsStringAsync().Result;
@@ -297,7 +307,7 @@ public class ApiClient
         return lastResponse;
     }
 
-    string SendRequest(string uri, string method)
+    string SendRequest(string uri, HttpMethod method)
     {
         return SendRequest(uri, method, "");
     }

@@ -33,7 +33,10 @@ public class MainMenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (apiClient.IsLoggedIn())
+            connectButton.GetComponentInChildren<Text>().text = "Disconnect";
+        else
+            connectButton.GetComponentInChildren<Text>().text = "Connect";
     }
 
     public void OnConnectClicked()
@@ -58,7 +61,7 @@ public class MainMenuController : MonoBehaviour
     public void OnEnterServer(bool success)
     {
         if (success)
-            connectButton.GetComponentInChildren<Text>().text = "Disconnect";
+            Notification.getInstance().InfoAsync("Login successfull");
         else
             Notification.getInstance().ErrorAsync("Could not connect to the server.");
     }

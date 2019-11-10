@@ -30,6 +30,8 @@ public abstract class WofCommand {
             case "identification": return new Identification(connection, packet);
             case "start": return new StartBattle(connection, packet);
             case "terminate": return new TerminateBattle(connection, packet);
+            case "pong": return new PingPong(connection, packet, "pong");
+            case "ping": return new PingPong(connection, packet, "ping");
         }
 
         throw new InvalidCommandReceived();

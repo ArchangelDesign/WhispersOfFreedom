@@ -47,7 +47,7 @@
 
             <div class="thumbnail">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/https://youtu.be/mTUgrtn2mCE"
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/mTUgrtn2mCE"
                             frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen></iframe>

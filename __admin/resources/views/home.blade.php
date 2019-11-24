@@ -44,6 +44,29 @@
     <div class="row">
 
         <div class="col-lg-4">
+
+            <div class="thumbnail">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/https://youtu.be/mTUgrtn2mCE"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+                <div class="caption">
+                    <h4>Wof #12</h4>
+                    <p>
+                        Everybody knows that Unity framework is not thread-safe, but does that mean we need to handle
+                        everything in one thread and use yielding for concurrency?
+                        Of course not, every game needs to utilize multithreading especially an online game like WoF.
+                        The topic of multithreading will be returning constantly throughout the process but now we have
+                        a working solution, kinda POC of handling multithreading.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-4">
             <div class="thumbnail">
                 <div class="embed-responsive embed-responsive-16by9">
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/j8pdJHeojP4" frameborder="0"
@@ -88,26 +111,6 @@
             </div>
         </div>
 
-        <div class="col-lg-4">
-
-            <div class="thumbnail">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/Bz2oXcCudNk" frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                </div>
-                <div class="caption">
-                    <h4>Wof #9</h4>
-                    <p>
-                        Some cleanup was required, heartbeat was coming even after the client has disconnected. Now
-                        along with heartbeat we're sending some stats about the load of the server. That will be crucial
-                        for live testing, hopefully next month I'll be uploading the binary to the server but first we
-                        need CI to be set up.
-                    </p>
-                </div>
-
-            </div>
-        </div>
 
     </div>
 </div>

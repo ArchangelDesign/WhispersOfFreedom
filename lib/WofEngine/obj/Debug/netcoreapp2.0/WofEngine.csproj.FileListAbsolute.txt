@@ -1,0 +1,4 @@
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netcoreapp2.0\WofEngine.csprojAssemblyReference.cache
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netcoreapp2.0\WofEngine.AssemblyInfoInputs.cache
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netcoreapp2.0\WofEngine.AssemblyInfo.cs
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netcoreapp2.0\WofEngine.csproj.CoreCompileInputs.cache

@@ -63,7 +63,7 @@ public class MainMenuController : MonoBehaviour
         if (success)
             Notification.getInstance().InfoAsync("Login successfull");
         else
-            Notification.getInstance().ErrorAsync("Could not connect to the server.");
+            Notification.getInstance().ErrorAsync("Invalid credentials or server error.");
     }
 
     public void OnCreateLobbyClicked()

@@ -1,0 +1,8 @@
+C:\Users\archa\Documents\WhispersOfFreedom\Assets\netcoreapp3.0\WofEngine.deps.json
+C:\Users\archa\Documents\WhispersOfFreedom\Assets\netcoreapp3.0\WofEngine.dll
+C:\Users\archa\Documents\WhispersOfFreedom\Assets\netcoreapp3.0\WofEngine.pdb
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netcoreapp3.0\WofEngine.AssemblyInfoInputs.cache
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netcoreapp3.0\WofEngine.AssemblyInfo.cs
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netcoreapp3.0\WofEngine.csproj.CoreCompileInputs.cache
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netcoreapp3.0\WofEngine.dll
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netcoreapp3.0\WofEngine.pdb

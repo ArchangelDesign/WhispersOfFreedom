@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "rR9KOXOLjKih19fjDD7niIUjbOU6sxyy04OK5MsCXh7bHX1G9EjoKAVe/z/4UlO4dnU65toov1KS/hz3cKEAHQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\archa\\Documents\\WhispersOfFreedom\\lib\\WofEngine\\WofEngine.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\archa\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\archa\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\archa\\.nuget\\packages\\newtonsoft.json\\12.0.1\\newtonsoft.json.12.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

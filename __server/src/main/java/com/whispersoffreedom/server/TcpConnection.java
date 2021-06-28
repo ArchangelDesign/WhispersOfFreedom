@@ -71,16 +71,15 @@ public class TcpConnection {
     public void packetReceived(WofPacket pck) {
         lastPacket = pck;
         lastRead = Instant.now();
-        logger.info("Packet received. Command: " + pck.getCommand());
+        logger.info(String.format("%s received from %s", pck.getCommand(), pck.getClientId()));
         // what a bad design
         WofServer.clientDataReceived(this, pck);
     }
 
     public void rawPacketReceived(String packet) {
-        Gson g = new Gson();
         WofPacket wofPacket;
         try {
-            wofPacket = g.fromJson(packet, WofPacket.class);
+            wofPacket = WofPacket.fromJson(packet);
         } catch (JsonSyntaxException syntaxException) {
             logger.error("Invalid JSON received: " + packet);
             return;

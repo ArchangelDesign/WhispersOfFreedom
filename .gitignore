@@ -63,3 +63,4 @@ __website/.idea
 .DS_Store
 
 /__admin/run-local.sh
+bin

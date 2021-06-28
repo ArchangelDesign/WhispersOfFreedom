@@ -96,7 +96,11 @@ public class WofUdpClient
         Debug.Log("Stoping UDP client...");
         connected = false;
         serverAlive = false;
-        client.Close();
+        try
+        {
+            client.Close();
+        }
+        catch (Exception) { }
         receiveThread.Abort();
     }
 

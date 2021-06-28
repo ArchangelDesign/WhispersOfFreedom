@@ -1,0 +1,9 @@
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netstandard20\WofEngine.csprojAssemblyReference.cache
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netstandard20\WofEngine.AssemblyInfoInputs.cache
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netstandard20\WofEngine.AssemblyInfo.cs
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netstandard20\WofEngine.csproj.CoreCompileInputs.cache
+C:\Users\archa\Documents\WhispersOfFreedom\Assets\netstandard20\WofEngine.deps.json
+C:\Users\archa\Documents\WhispersOfFreedom\Assets\netstandard20\WofEngine.dll
+C:\Users\archa\Documents\WhispersOfFreedom\Assets\netstandard20\WofEngine.pdb
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netstandard20\WofEngine.dll
+C:\Users\archa\Documents\WhispersOfFreedom\lib\WofEngine\obj\Debug\netstandard20\WofEngine.pdb

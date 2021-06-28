@@ -31,6 +31,11 @@ public class WofPacket {
         return g.toJson(this);
     }
 
+    public static WofPacket fromJson(String jsonString)
+    {
+        return new Gson().fromJson(jsonString, WofPacket.class);
+    }
+
     public boolean isIdentification() {
         return command.equalsIgnoreCase("identification");
     }

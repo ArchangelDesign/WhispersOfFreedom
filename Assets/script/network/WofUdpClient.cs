@@ -93,15 +93,15 @@ public class WofUdpClient
 
     public void OnDestroy()
     {
-        Debug.Log("Stoping UDP client...");
-        connected = false;
-        serverAlive = false;
-        try
-        {
-            client.Close();
-        }
-        catch (Exception) { }
-        receiveThread.Abort();
+        //Debug.Log("Stoping UDP client...");
+        //connected = false;
+        //serverAlive = false;
+        //try
+        //{
+        //    client.Close();
+        //}
+        //catch (Exception) { }
+        //receiveThread.Abort();
     }
 
 }

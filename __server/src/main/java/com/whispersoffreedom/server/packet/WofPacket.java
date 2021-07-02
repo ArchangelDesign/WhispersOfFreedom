@@ -23,7 +23,7 @@ public class WofPacket {
     protected String memo;
     protected HashMap<String, String> parameters = new HashMap<>();
     // Packets are also used by UDP server
-    protected Instant timestamp = Instant.now();
+    protected Long timestamp = Instant.now().toEpochMilli();
 
     public String toJson() {
         Gson g = new Gson();

@@ -10,7 +10,7 @@ namespace WofEngine.Service
     class RestService
     {
         const string BaseUrl = "http://127.0.0.1:8080";
-        private string SessionToken;
+        public string SessionToken { get; private set; }
         public string LastError { get; private set; }
         public AbstractRestResponse Send(IRestRequest request)
         {

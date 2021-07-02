@@ -56,6 +56,7 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\script\StateMonitor.cs" />
     <Compile Include="Assets\script\entity\weapon\german\MG42.cs" />
     <Compile Include="Assets\script\network\ApiClient.cs" />
     <Compile Include="Assets\script\UI\NotificationController.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Assets\script\entity\weapon\german\K98.cs" />
     <Compile Include="Assets\script\network\Entity\Request\PongCommand.cs" />
     <Compile Include="Assets\script\UI\ServerStatus.cs" />
+    <Compile Include="Assets\script\LoginController.cs" />
     <Compile Include="Assets\script\entity\weapon\german\MP40.cs" />
     <Compile Include="Assets\script\network\Entity\Request\EnterBattleRequest.cs" />
     <Compile Include="Assets\script\UI\Notification.cs" />
@@ -85,7 +87,7 @@
     <Compile Include="Assets\script\GlobalConfig.cs" />
     <Compile Include="Assets\script\network\Entity\Request\EnterServerRequest.cs" />
     <Compile Include="Assets\script\entity\soldier\german\GermanAssistantGunner.cs" />
-    <Compile Include="Assets\script\LoginController.cs" />
+    <Compile Include="Assets\script\TcpConnectionError.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\netstandard20\WofEngine.dll" />
@@ -316,6 +318,9 @@
     <Reference Include="Unity.Analytics.StandardEvents">
       <HintPath>Library\PackageCache\com.unity.analytics@3.5.3\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
+    <Reference Include="WofEngine">
+      <HintPath>Assets\netstandard20\WofEngine.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -324,9 +329,6 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>Library\PackageCache\com.unity.analytics@3.5.3\Unity.Analytics.Tracker.dll</HintPath>
-    </Reference>
-    <Reference Include="WofEngine">
-      <HintPath>Assets\netstandard20\WofEngine.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.12f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>

@@ -82,6 +82,7 @@ public class TcpConnection {
             wofPacket = WofPacket.fromJson(packet);
         } catch (JsonSyntaxException syntaxException) {
             logger.error("Invalid JSON received: " + packet);
+            logger.error(syntaxException.getMessage());
             return;
         }
         if (wofPacket == null) {

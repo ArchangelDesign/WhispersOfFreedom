@@ -47,6 +47,51 @@
 
             <div class="thumbnail">
                 <div class="embed-responsive embed-responsive-16by9">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/wNXXHL4BfKg"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+                <div class="caption">
+                    <h4>Wof #14</h4>
+                    <p>
+                        As the new Global Game Object seems to be doing well we need to implement a TCP/IP connection
+                        and identify the client. Meanwhile, I decided to address the problem of multithreading again and
+                        this time do it in a way that is easier to maintain and debug. StateMonitor object subscribes to
+                        state changes in the main game object and queues all changes that are later picked up by the
+                        main game thread, allowing it to interact with the UI layer directly.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="thumbnail">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/pV162Bmm4eA"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+                <div class="caption">
+                    <h4>Wof #13</h4>
+                    <p>
+                        So far I've been mainly focused on the server-side of things while the client was limited to MVP
+                        at best. Time to put some effort into the client. The first step is adding DLL and moving all
+                        the code there. This will allow unit testing, independent deployment, and freedom from the Unity
+                        project.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="thumbnail">
+                <div class="embed-responsive embed-responsive-16by9">
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/mTUgrtn2mCE"
                             frameborder="0"
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -65,52 +110,6 @@
 
             </div>
         </div>
-
-        <div class="col-lg-4">
-            <div class="thumbnail">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/j8pdJHeojP4" frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                </div>
-
-                <div class="caption">
-                    <h4>Wof #11</h4>
-                    <p>
-                        Finally, I have released a public server hosted on DigitalOcean, that will allow us to conduct
-                        the first concurrency test. For that reason, I've replaced HashMaps with Hashtables and
-                        meanwhile discovered a bug with TCP handshake, now the client properly establishes TCP
-                        connection after starting a session and only one session is allowed from each client account.
-                        Hopefully, the next step will be releasing a lobby screen with chat functionality so we can
-                        actually test this architecture which is already showing many fundamental problems with it.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="thumbnail">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/nExLEaLKaTI" frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                </div>
-
-                <div class="caption">
-                    <h4>Wof #10</h4>
-                    <p>
-                        It seems that every time I want to move on to lobby screen there is something on the main menu
-                        screen not letting me do that.
-                        At first, I wanted a simple notification in the corner of the screen, plain text, fade in and
-                        out, however, once I looked at that I came t the conclusion that it just plain didn't work, not
-                        only it was bearly visible but there was an issue when multiple notifications were displayed.
-                        Since it is the only way to notify the user of any errors I had to fix that before moving on
-                        with anything.
-                    </p>
-                </div>
-            </div>
-        </div>
-
 
     </div>
 </div>

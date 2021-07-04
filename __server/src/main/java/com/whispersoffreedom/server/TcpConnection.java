@@ -37,10 +37,6 @@ public class TcpConnection {
 
     private Client client;
 
-    public void noticeTransmission() {
-        lastTransmission = Instant.now();
-    }
-
     public TcpConnection(UUID connectionId, Socket socket) {
         this.socket = socket;
         this.connectionId = connectionId;
@@ -58,6 +54,7 @@ public class TcpConnection {
         Gson g = new Gson();
         String toSend = g.toJson(packet);
         outputWriter.println(toSend);
+        lastTransmission = Instant.now();
     }
 
     public void write(byte[] data) throws IOException {
@@ -72,6 +69,7 @@ public class TcpConnection {
         lastPacket = pck;
         lastRead = Instant.now();
         logger.info(String.format("%s received from %s", pck.getCommand(), pck.getClientId()));
+        lastTransmission = Instant.now();
         // what a bad design
         WofServer.clientDataReceived(this, pck);
     }

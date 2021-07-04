@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using WofEngine;
+using WofEngine.NetworkCommand;
+using WofEngine.NetworkPacket;
 
 public class LoginController : MonoBehaviour
 {
@@ -11,9 +13,20 @@ public class LoginController : MonoBehaviour
 
     void Start()
     {
-        WofGameObject.Game.StateChangedCallback += StateHasChanged;
+        WofGameObject.Game.OnStateChanged += StateHasChanged;
+        WofGameObject.Game.OnCommandReceived += CommandReceived;
+        WofGameObject.Game.OnPacketReceived += PackedReceived;
     }
 
+    private void PackedReceived(GenericNetworkPacket packet)
+    {
+        Debug.Log("UDP packet: " + packet.Command);
+    }
+
+    private void CommandReceived(GenericNetworkCommand cmd)
+    {
+        Debug.Log("Command received: " + cmd.Command);
+    }
 
     void Update()
     {
@@ -67,5 +80,10 @@ public class LoginController : MonoBehaviour
         {
             Debug.LogError("TCP connection error");
         }
+    }
+
+    public void OnDestroy()
+    {
+        WofGameObject.Game.Exit();
     }
 }

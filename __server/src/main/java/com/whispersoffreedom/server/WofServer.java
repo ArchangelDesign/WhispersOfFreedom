@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -207,17 +208,6 @@ public class WofServer {
     }
 
     /**
-     * Once client established a connection, it needs to identify it
-     * by providing its session token (client ID)
-     *
-     * @param connection valid TCP/IP connection established by the client
-     * @param packet Usually an identification packet but it can be any packet
-     */
-    public static void clientIdentified(TcpConnection connection, WofPacket packet) {
-        getClient(packet.getClientId()).acceptTcpConnection(connection);
-    }
-
-    /**
      * Inefficient method of finding client's ID
      * based on connection ID. Used only for dropping
      * clients in case TCP connection has been lost.
@@ -249,35 +239,30 @@ public class WofServer {
     }
 
     /**
-     * Sends UDP packet to the client.
-     * Client address along with data is inside the packet.
-     *
-     * @param dp client's datagram packet
-     */
-    public static void sendUdpPacket(DatagramPacket dp) {
-        try {
-            if (udpServer == null) {
-                logger.error("No UDP server.");
-                return;
-            }
-            udpServer.send(dp);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    /**
      * Called by UdpServer whenever client sends
      * identification packet synchronizing client
      * with UDP server allowing broadcast
      *
      * @param wofPacket received packet
-     * @param packet raw packet, contains source address
+     * @param socket    UDP socket instance
      */
-    public static void clientIdentified(WofPacket wofPacket, DatagramPacket packet) {
+    public static void clientIdentified(DatagramSocket socket, WofPacket wofPacket, DatagramPacket packet) {
         Client c = clients.get(wofPacket.getClientId());
-        c.acceptUdpConnection(packet);
-        logger.info(String.format("Client %s connected via UDP from %s", c.getUsername(), packet.getSocketAddress().toString()));
+        c.acceptUdpConnection(socket, packet);
+        logger.info(String.format("Client %s connected via UDP from %s", c.getUsername(), packet.getAddress().toString()));
+    }
+
+    /**
+     * Once client established a connection, it needs to identify it
+     * by providing its session token (client ID)
+     *
+     * @param connection valid TCP/IP connection established by the client
+     * @param packet     Usually an identification packet but it can be any packet
+     */
+    public static void clientIdentifiedTcp(TcpConnection connection, WofPacket packet) {
+        Client c = clients.get(packet.getClientId());
+        c.acceptTcpConnection(connection);
+        logger.info(String.format("Client %s connected via TCP", c.getUsername()));
     }
 
     /**
@@ -302,6 +287,7 @@ public class WofServer {
     /**
      * Returns true if the client is a zombie
      * and should be dropped.
+     *
      * @param c Given client
      * @return true if c is a zombie
      */

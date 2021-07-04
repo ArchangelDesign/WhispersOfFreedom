@@ -14,7 +14,7 @@ public class Identification extends WofCommand {
     @Override
     public void execute() {
         logger.info("Identifying client... " + packet.getClientId());
-        WofServer.clientIdentified(connection, packet);
+        WofServer.clientIdentifiedTcp(connection, packet);
         super.connection.sendPacket(new WofPacketSimple(super.packet.getClientId(), "welcome"));
     }
 }

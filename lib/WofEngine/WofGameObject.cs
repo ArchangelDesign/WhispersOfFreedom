@@ -5,6 +5,7 @@ using System.Threading;
 using WofEngine.Entity;
 using WofEngine.Exceptions;
 using WofEngine.NetworkCommand;
+using WofEngine.NetworkPacket;
 using WofEngine.Service;
 
 namespace WofEngine
@@ -24,12 +25,17 @@ namespace WofEngine
         private readonly RestService Rest = new RestService();
         public WOF_STATE State { get; private set; } = WOF_STATE.LOGIN_SCREEN;
 
-        public delegate void OnStateChanged(WOF_STATE state);
+        public delegate void StateChangedDelegate(WOF_STATE state);
+        public delegate void CommandReceivedDelegate(GenericNetworkCommand cmd);
+        public delegate void PacketReceivedDelegate(GenericNetworkPacket packet);
 
-        public OnStateChanged StateChangedCallback;
+        public StateChangedDelegate OnStateChanged;
+        public CommandReceivedDelegate OnCommandReceived;
+        public PacketReceivedDelegate OnPacketReceived;
 
-        private SocketService TcpSocketService;
+        private SocketService SocketService;
         
+
         public void EnterServer(string username, string password)
         {
             SetNewState(WOF_STATE.LOGINIG_IN);
@@ -37,32 +43,59 @@ namespace WofEngine
             new Thread(new ParameterizedThreadStart(EnterServer)).Start(request);
         }
 
-        public void InitializeTcpConnection() {
+        public void InitializeTcpConnection()
+        {
             // TODO: log errors, report connection problems
-            if (TcpSocketService != null)
+            if (SocketService != null)
                 return;
             if (Rest.SessionToken == null)
                 return;
-            TcpSocketService = new SocketService("127.0.0.1", 8081);
-            TcpSocketService.OnDataReceivedCallback += SocketDataReceived;
+            SocketService = new SocketService("127.0.0.1", 8081);
+            SocketService.OnDataReceivedCallback += SocketDataReceived;
+            SocketService.OnPacketReceived += PacketReceived;
             // wait for connection to be established
             int waitPeriod = 0;
-            while (!TcpSocketService.IsReady && waitPeriod < 5)
+            while (!SocketService.IsReady && waitPeriod < 5)
             {
                 Thread.Sleep(1000);
                 waitPeriod++;
             }
-            if (!TcpSocketService.IsReady)
+            if (!SocketService.IsReady)
                 throw new TcpConnectionError();
-            TcpSocketService.SendCommand(new IdentificationCommand(Rest.SessionToken));
+            SocketService.SendCommand(new IdentificationCommand(Rest.SessionToken));
+            SocketService.SendPacket(new IdentificationPacket(Rest.SessionToken));
+        }
+
+        private void PacketReceived(string data)
+        {
+            GenericNetworkPacket packet = GenericNetworkPacket.FromJson(data);
+            if (OnPacketReceived != null)
+                OnPacketReceived(packet);
         }
 
         private void SocketDataReceived(string data)
         {
-            // throw new NotImplementedException();
+            try
+            {
+                GenericNetworkCommand cmd = GenericNetworkCommand.FromJson(data);
+                if (OnCommandReceived != null)
+                    OnCommandReceived(cmd);
+                switch (cmd.Command.ToLower())
+                {
+                    case "welcome":
+
+                        break;
+                    case "ping":
+                        break;
+                }
+            }
+            catch (Exception) { }
         }
 
-        public void InitializeUdpConnection() { }
+        public void InitializeUdpConnection()
+        {
+
+        }
 
 
         private void EnterServer(object request)
@@ -79,12 +112,18 @@ namespace WofEngine
             }
         }
 
+        public void Exit()
+        {
+            SocketService.Disconnect();
+        }
 
         private void SetNewState(WOF_STATE newState)
         {
             State = newState;
-            if (StateChangedCallback != null)
-                StateChangedCallback(newState);
+            if (OnStateChanged != null)
+                OnStateChanged(newState);
         }
+
+
     }
 }

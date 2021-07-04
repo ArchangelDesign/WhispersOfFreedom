@@ -1,6 +1,5 @@
 package com.whispersoffreedom.server;
 
-import com.whispersoffreedom.server.packet.PingPacket;
 import com.whispersoffreedom.server.packet.StateUpdatePacket;
 import com.whispersoffreedom.server.packet.WofPacket;
 import com.whispersoffreedom.server.packet.WofPacketBroadcast;
@@ -8,7 +7,9 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class Client {
 
     private TcpConnection connection;
 
-    private DatagramPacket udpPacket;
+    private DatagramSocket udpSocket;
 
     private boolean alive = true;
 
@@ -39,6 +40,7 @@ public class Client {
     private Instant connected = Instant.now();
 
     Logger logger;
+    private DatagramPacket udpPacket;
 
     public Client(String newUsername) {
         username = newUsername;
@@ -63,19 +65,19 @@ public class Client {
             logger.error("No TCP connection for " + username);
             return;
         }
-        sendPacket(new WofPacketBroadcast(id.toString(), message));
+        sendTcpPacket(new WofPacketBroadcast(id.toString(), message));
     }
 
-    public void sendPacket(WofPacket packet) {
+    public void sendTcpPacket(WofPacket packet) {
         connection.sendPacket(packet);
     }
 
-    public void sendUdpPacket(WofPacket packet) {
-        if (udpPacket == null)
+    public void sendUdpPacket(WofPacket packet) throws IOException {
+        if (udpSocket == null)
             return;
         String data = packet.toJson();
-        DatagramPacket dp = new DatagramPacket(data.getBytes(), data.length(), udpPacket.getSocketAddress());
-        WofServer.sendUdpPacket(dp);
+        udpPacket.setData(data.getBytes());
+        udpSocket.send(udpPacket);
     }
 
     public void acceptTcpConnection(TcpConnection conn) {
@@ -84,8 +86,9 @@ public class Client {
         conn.setClient(this);
     }
 
-    public void acceptUdpConnection(DatagramPacket packet) {
-        logger.info("Accepting UDP connections on " + packet.getSocketAddress().toString());
+    public void acceptUdpConnection(DatagramSocket socket, DatagramPacket packet) {
+        logger.info("Accepting UDP connections on " + socket.toString());
+        udpSocket = socket;
         udpPacket = packet;
     }
 
@@ -116,12 +119,14 @@ public class Client {
 //                return;
 //            }
 
-            if (udpPacket == null)
+            if (udpSocket == null)
                 continue;
 
-            String buff = new StateUpdatePacket(this).toJson();
-            udpPacket.setData(buff.getBytes());
-            WofServer.sendUdpPacket(udpPacket);
+            try {
+                sendUdpPacket(new StateUpdatePacket(this));
+            } catch (IOException e) {
+                logger.error("UDP Heartbeat error: " + e.getMessage());
+            }
         }
     }
 }

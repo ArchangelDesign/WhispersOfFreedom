@@ -15,7 +15,7 @@ public class StateMonitor : MonoBehaviour
     void Start()
     {
         LoadingIndicator = GameObject.Find("LoadingIndicator");
-        WofGameObject.Game.StateChangedCallback += StateIsChanging;
+        WofGameObject.Game.OnStateChanged += StateIsChanging;
         HideLoadingIndicator();
     }
 

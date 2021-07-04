@@ -24,7 +24,7 @@ public class UdpServer {
 
     private Logger logger = LoggerFactory.getLogger(UdpServer.class);
 
-    private HashMap<String, DatagramPacket> clients = new HashMap<>();
+    private final HashMap<String, DatagramPacket> clients = new HashMap<>();
 
     private DatagramSocket socket;
 
@@ -39,11 +39,9 @@ public class UdpServer {
 
     public void startListening() {
         byte[] buffer = new byte[255];
-
+        logger.info("UDP server started.");
         while (running) {
-            logger.info("waiting for packet...");
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-
             try {
                 socket.receive(packet);
             } catch (IOException e) {
@@ -73,7 +71,7 @@ public class UdpServer {
         if (wofPacket.isIdentification()) {
             // this is the only packet we care about for now
             logger.info("Identifying UDP client...");
-            WofServer.clientIdentified(wofPacket, packet);
+            WofServer.clientIdentified(socket, wofPacket, packet);
         }
 
     }

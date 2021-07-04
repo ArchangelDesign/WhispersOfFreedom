@@ -19,6 +19,8 @@ namespace WofEngine.Tests
             // TODO: use callback or wait properly
             Thread.Sleep(2000);
             Assert.AreEqual(WOF_STATE.LOBBY, WofGameObject.Game.State);
+            WofGameObject.Game.InitializeTcpConnection();
+            WofGameObject.Game.InitializeUdpConnection();
         }
 
         [TestMethod()]

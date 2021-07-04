@@ -1,33 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using WofEngine.NetworkCommand;
+using WofEngine.NetworkPacket;
 
 namespace WofEngine.Service
 {
     class SocketService
     {
         public delegate void TcpDataReceivedDelegate(string data);
+        public delegate void UdpDataReceivedDelegate(string data);
         public TcpDataReceivedDelegate OnDataReceivedCallback;
+        public UdpDataReceivedDelegate OnPacketReceived;
+
         public bool IsReady { get; private set; } = false;
         private TcpClient TcpConnection;
-        private Thread NetworkThread;
+        private UdpClient UdpConnection;
+        private Thread TcpNetworkThread;
+        private Thread UdpNetworkThread;
         private string ServerAddress;
         private int ServerPort;
-
+        private IPEndPoint Endpoint;
+        private bool ClientAlive = true;
 
         public SocketService(string address, int port)
         {
             ServerAddress = address;
             ServerPort = port;
-            NetworkThread = new Thread(new ThreadStart(NetworkHandler));
-            NetworkThread.Start();
+            Endpoint = new IPEndPoint(IPAddress.Parse(ServerAddress), ServerPort + 1);
+            UdpConnection = new UdpClient(ServerAddress, ServerPort + 1);
+            UdpConnection.Connect(Endpoint);
+            TcpNetworkThread = new Thread(new ThreadStart(TcpHandler));
+            TcpNetworkThread.Start();
+            UdpNetworkThread = new Thread(new ThreadStart(UdpHandler));
+            UdpNetworkThread.Start();
         }
 
-        private void NetworkHandler() {
+        private void UdpHandler()
+        {
+            while (ClientAlive)
+            {
+                byte[] data = UdpConnection.Receive(ref Endpoint);
+                string json = Encoding.UTF8.GetString(data);
+                if (OnPacketReceived != null)
+                    OnPacketReceived(json);
+            }
+        }
+
+        private void TcpHandler() {
             TcpConnection = new TcpClient(ServerAddress, ServerPort);
             Byte[] buffer = new byte[1024];
             IsReady = true;
@@ -65,6 +89,19 @@ namespace WofEngine.Service
             StreamWriter writer = new StreamWriter(stream);
             writer.WriteLine(command.ToJson());
             writer.Flush();
+        }
+
+        public void SendPacket(GenericNetworkPacket packet)
+        {
+            byte[] data = packet.ToBytes();
+            UdpConnection.Send(data, data.Length);
+        }
+
+        public void Disconnect()
+        {
+            TcpConnection.Close();
+            ClientAlive = false;
+            UdpConnection.Close();
         }
     }
 }

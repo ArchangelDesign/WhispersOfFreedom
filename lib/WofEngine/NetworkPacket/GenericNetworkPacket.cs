@@ -36,5 +36,29 @@ namespace WofEngine.NetworkPacket
         {
             return Encoding.UTF8.GetBytes(ToJson());
         }
+
+        public long GetTime()
+        {
+            return long.Parse(Parameters["currentTime"]);
+        }
+
+        public long GetMilliseconds()
+        {
+            return long.Parse(Parameters["currentTimeFraction"]) / 1000000;
+        }
+
+        public long GetLatencyMilliseconds()
+        {
+            double t = (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            long currentSeconds = long.Parse(Math.Floor(t).ToString());
+            long currentMilliseconds = DateTime.UtcNow.Millisecond;
+            long packetSeconds = GetTime();
+            long packetMilliseconds = GetMilliseconds();
+
+            long seconds = (currentSeconds - packetSeconds) * 1000;
+            long milis = currentMilliseconds - packetMilliseconds;
+
+            return seconds + milis;
+        }
     }
 }

@@ -77,6 +77,7 @@
     <Compile Include="Assets\script\LoginController.cs" />
     <Compile Include="Assets\script\entity\weapon\german\MP40.cs" />
     <Compile Include="Assets\script\network\Entity\Request\EnterBattleRequest.cs" />
+    <Compile Include="Assets\script\TcpConnectionError.cs" />
     <Compile Include="Assets\script\UI\Notification.cs" />
     <Compile Include="Assets\script\network\Entity\Enums\ServerState.cs" />
     <Compile Include="Assets\script\network\Entity\Request\IdentificationCommand.cs" />
@@ -87,7 +88,6 @@
     <Compile Include="Assets\script\GlobalConfig.cs" />
     <Compile Include="Assets\script\network\Entity\Request\EnterServerRequest.cs" />
     <Compile Include="Assets\script\entity\soldier\german\GermanAssistantGunner.cs" />
-    <Compile Include="Assets\script\TcpConnectionError.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\netstandard20\WofEngine.dll" />

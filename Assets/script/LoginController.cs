@@ -21,6 +21,7 @@ public class LoginController : MonoBehaviour
     private void PackedReceived(GenericNetworkPacket packet)
     {
         Debug.Log("UDP packet: " + packet.Command);
+        Debug.Log(packet.ToJson());
     }
 
     private void CommandReceived(GenericNetworkCommand cmd)

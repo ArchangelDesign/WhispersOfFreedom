@@ -11,7 +11,8 @@ public class StateUpdatePacket extends WofPacket {
         command = "state_update";
         parameters.put("inBattle", client.isInBattle() ? "true" : "false");
         parameters.put("connected", client.getConnected().toString());
-        parameters.put("currentTime", Instant.now().toString());
+        parameters.put("currentTime", String.valueOf(Instant.now().getEpochSecond()));
+        parameters.put("currentTimeFraction", String.valueOf(Instant.now().getNano()));
         parameters.put("clientCount", String.valueOf(WofServer.getClientCount()));
         parameters.put("battleCount", String.valueOf(WofServer.getBattleCount()));
         if (!client.isInBattle())
